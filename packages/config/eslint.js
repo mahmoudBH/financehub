@@ -11,6 +11,7 @@ module.exports = {
   env: {
     node: true,
     es2022: true,
+    jest: true,
   },
   ignorePatterns: ['node_modules/', 'dist/', '.next/', 'coverage/'],
   rules: {
