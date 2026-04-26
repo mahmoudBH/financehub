@@ -1,0 +1,399 @@
+// ============================================
+// FINANCE DASHBOARD - Prisma Schema (SQLite)
+// Digital Banking / Fintech Dashboard Simulator
+// ============================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// MODELS (SQLite: no enums, no Json — use String)
+// ============================================
+
+model User {
+  id                String      @id @default(uuid())
+  email             String      @unique
+  passwordHash      String
+  firstName         String
+  lastName          String
+  phone             String?
+  avatarUrl         String?
+  dateOfBirth       DateTime?
+  address           String?
+  city              String?
+  country           String?
+  postalCode        String?
+  role              String      @default("USER")        // USER, ADMIN, SUPER_ADMIN
+  status            String      @default("PENDING_VERIFICATION") // ACTIVE, INACTIVE, SUSPENDED
+  emailVerified     Boolean     @default(false)
+  twoFactorEnabled  Boolean     @default(false)
+  kycStatus         String      @default("PENDING")     // PENDING, SUBMITTED, VERIFIED, REJECTED
+  preferredCurrency String      @default("EUR")
+  language          String      @default("en")
+  timezone          String      @default("Europe/Paris")
+  lastLoginAt       DateTime?
+  lastLoginIp       String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  accounts              Account[]
+  cards                 Card[]
+  sentTransfers         Transfer[]          @relation("SentTransfers")
+  receivedTransfers     Transfer[]          @relation("ReceivedTransfers")
+  transactions          Transaction[]
+  deposits              Deposit[]
+  withdrawals           Withdrawal[]
+  exchangeHistories     ExchangeHistory[]
+  notifications         Notification[]
+  auditLogs             AuditLog[]
+  refreshTokens         RefreshToken[]
+  passwordResetTokens   PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
+  beneficiaries         Beneficiary[]       @relation("UserBeneficiaries")
+  beneficiaryOf         Beneficiary[]       @relation("BeneficiaryUser")
+
+  @@index([email])
+  @@index([status])
+  @@index([role])
+  @@map("users")
+}
+
+model RefreshToken {
+  id          String   @id @default(uuid())
+  tokenHash   String   @unique
+  userId      String
+  userAgent   String?
+  ipAddress   String?
+  expiresAt   DateTime
+  revokedAt   DateTime?
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@map("refresh_tokens")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(uuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("email_verification_tokens")
+}
+
+model Account {
+  id            String   @id @default(uuid())
+  accountNumber String   @unique
+  name          String
+  type          String   @default("CHECKING")  // CHECKING, SAVINGS, BUSINESS, INVESTMENT
+  status        String   @default("ACTIVE")    // ACTIVE, FROZEN, CLOSED, PENDING
+  currency      String   @default("EUR")
+  balance       Decimal  @default(0)
+  availableBalance Decimal @default(0)
+  userId        String
+  isDefault     Boolean  @default(false)
+  iban          String?  @unique
+  bic           String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cards         Card[]
+  outgoingTransfers Transfer[] @relation("SourceAccount")
+  incomingTransfers Transfer[] @relation("DestinationAccount")
+  transactions  Transaction[]
+  deposits      Deposit[]
+  withdrawals   Withdrawal[]
+  exchangeFrom  ExchangeHistory[] @relation("ExchangeFromAccount")
+  exchangeTo    ExchangeHistory[] @relation("ExchangeToAccount")
+
+  @@index([userId])
+  @@index([accountNumber])
+  @@index([status])
+  @@map("accounts")
+}
+
+model Card {
+  id              String   @id @default(uuid())
+  cardNumber      String   @unique
+  last4           String
+  cardholderName  String
+  brand           String   @default("VISA")              // VISA, MASTERCARD, AMEX
+  type            String   @default("VIRTUAL")            // VIRTUAL, PHYSICAL
+  status          String   @default("PENDING_ACTIVATION") // ACTIVE, BLOCKED, EXPIRED
+  expiryMonth     Int
+  expiryYear      Int
+  dailyLimit      Decimal  @default(5000)
+  monthlyLimit    Decimal  @default(25000)
+  totalSpent      Decimal  @default(0)
+  currency        String   @default("EUR")
+  isContactless   Boolean  @default(true)
+  isOnlineEnabled Boolean  @default(true)
+  userId          String
+  accountId       String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([accountId])
+  @@index([status])
+  @@map("cards")
+}
+
+model Beneficiary {
+  id            String   @id @default(uuid())
+  userId        String
+  beneficiaryId String?
+  name          String
+  email         String?
+  iban          String?
+  bic           String?
+  accountNumber String?
+  bankName      String?
+  isFavorite    Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user        User  @relation("UserBeneficiaries", fields: [userId], references: [id], onDelete: Cascade)
+  beneficiary User? @relation("BeneficiaryUser", fields: [beneficiaryId], references: [id], onDelete: SetNull)
+  transfers   Transfer[]
+
+  @@unique([userId, email])
+  @@index([userId])
+  @@map("beneficiaries")
+}
+
+model Transfer {
+  id                   String   @id @default(uuid())
+  reference            String   @unique
+  senderId             String
+  recipientId          String?
+  sourceAccountId      String
+  destinationAccountId String?
+  beneficiaryId        String?
+  amount               Decimal
+  currency             String   @default("EUR")
+  fee                  Decimal  @default(0)
+  totalAmount          Decimal
+  status               String   @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED, CANCELLED
+  description          String?
+  failureReason        String?
+  scheduledAt          DateTime?
+  completedAt          DateTime?
+  cancelledAt          DateTime?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  sender             User          @relation("SentTransfers", fields: [senderId], references: [id])
+  recipient          User?         @relation("ReceivedTransfers", fields: [recipientId], references: [id])
+  sourceAccount      Account       @relation("SourceAccount", fields: [sourceAccountId], references: [id])
+  destinationAccount Account?      @relation("DestinationAccount", fields: [destinationAccountId], references: [id])
+  beneficiary        Beneficiary?  @relation(fields: [beneficiaryId], references: [id])
+  transactions       Transaction[]
+
+  @@index([senderId])
+  @@index([recipientId])
+  @@index([status])
+  @@index([reference])
+  @@index([createdAt])
+  @@map("transfers")
+}
+
+model Transaction {
+  id            String   @id @default(uuid())
+  reference     String   @unique
+  type          String               // DEPOSIT, WITHDRAWAL, TRANSFER_IN, TRANSFER_OUT, EXCHANGE, FEE, REFUND
+  status        String   @default("PENDING") // PENDING, COMPLETED, FAILED, CANCELLED, REVERSED
+  amount        Decimal
+  fee           Decimal  @default(0)
+  currency      String   @default("EUR")
+  description   String?
+  balanceBefore Decimal?
+  balanceAfter  Decimal?
+  metadata      String?              // JSON string stored as text
+  userId        String
+  accountId     String
+  transferId    String?
+  depositId     String?
+  withdrawalId  String?
+  exchangeId    String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user        User              @relation(fields: [userId], references: [id])
+  account     Account           @relation(fields: [accountId], references: [id])
+  transfer    Transfer?         @relation(fields: [transferId], references: [id])
+  deposit     Deposit?          @relation(fields: [depositId], references: [id])
+  withdrawal  Withdrawal?       @relation(fields: [withdrawalId], references: [id])
+  exchange    ExchangeHistory?  @relation(fields: [exchangeId], references: [id])
+
+  @@index([userId])
+  @@index([accountId])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+  @@index([reference])
+  @@map("transactions")
+}
+
+model Deposit {
+  id          String   @id @default(uuid())
+  reference   String   @unique
+  amount      Decimal
+  currency    String   @default("EUR")
+  method      String   @default("BANK_TRANSFER") // BANK_TRANSFER, CARD, CASH, WIRE
+  status      String   @default("PENDING")
+  description String?
+  userId      String
+  accountId   String
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id])
+  account      Account       @relation(fields: [accountId], references: [id])
+  transactions Transaction[]
+
+  @@index([userId])
+  @@index([accountId])
+  @@index([status])
+  @@map("deposits")
+}
+
+model Withdrawal {
+  id          String   @id @default(uuid())
+  reference   String   @unique
+  amount      Decimal
+  currency    String   @default("EUR")
+  method      String   @default("BANK_TRANSFER") // BANK_TRANSFER, ATM, WIRE
+  status      String   @default("PENDING")
+  description String?
+  userId      String
+  accountId   String
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id])
+  account      Account       @relation(fields: [accountId], references: [id])
+  transactions Transaction[]
+
+  @@index([userId])
+  @@index([accountId])
+  @@index([status])
+  @@map("withdrawals")
+}
+
+model ExchangeRate {
+  id           String   @id @default(uuid())
+  fromCurrency String
+  toCurrency   String
+  rate         Decimal
+  spread       Decimal  @default(0.005)
+  isActive     Boolean  @default(true)
+  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now())
+
+  @@unique([fromCurrency, toCurrency])
+  @@index([fromCurrency, toCurrency])
+  @@map("exchange_rates")
+}
+
+model ExchangeHistory {
+  id            String   @id @default(uuid())
+  reference     String   @unique
+  fromCurrency  String
+  toCurrency    String
+  fromAmount    Decimal
+  toAmount      Decimal
+  rate          Decimal
+  fee           Decimal  @default(0)
+  status        String   @default("PENDING")
+  userId        String
+  fromAccountId String
+  toAccountId   String
+  completedAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user        User          @relation(fields: [userId], references: [id])
+  fromAccount Account       @relation("ExchangeFromAccount", fields: [fromAccountId], references: [id])
+  toAccount   Account       @relation("ExchangeToAccount", fields: [toAccountId], references: [id])
+  transactions Transaction[]
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("exchange_history")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  type      String               // TRANSACTION, TRANSFER, SECURITY, ACCOUNT, CARD, SYSTEM, PROMOTION
+  priority  String   @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
+  title     String
+  message   String
+  data      String?              // JSON string stored as text
+  isRead    Boolean  @default(false)
+  readAt    DateTime?
+  userId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  action      String               // LOGIN, SIGNUP, TRANSFER_CREATE, etc.
+  description String?
+  metadata    String?              // JSON string stored as text
+  ipAddress   String?
+  userAgent   String?
+  userId      String?
+  targetId    String?
+  targetType  String?
+  createdAt   DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@index([targetId])
+  @@map("audit_logs")
+}
