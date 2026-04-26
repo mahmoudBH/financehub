@@ -98,7 +98,6 @@ graph TD
 ## 📸 Screenshots
 
 ![Dashboard Screenshot](./docs/dashboard-screenshot.png)
-*(Note: Add your dashboard screenshot here)*
 
 
 ## 🚀 Quick Start
