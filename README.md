@@ -9,6 +9,8 @@
 
 **A modern, enterprise-grade fintech dashboard simulator built for portfolio demonstration.**
 
+**Author:** Mahmoud Bousbih
+
 </div>
 
 ---
@@ -78,6 +80,26 @@ finance-dashboard/
 ├── .github/workflows/    # CI/CD
 └── docs/                 # Documentation
 ```
+
+## 🏗️ Architecture Diagram
+
+```mermaid
+graph TD
+    Client[Web Browser / Client] -->|HTTP / WebSocket| NextJS[Next.js Frontend]
+    NextJS -->|REST API / Socket.io| NestJS[NestJS API Gateway & Backend]
+    
+    subgraph Backend Architecture
+        NestJS -->|Prisma ORM| MySQL[(MySQL Database)]
+        NestJS -->|ioredis| Redis[(Redis Cache / PubSub)]
+        NestJS -.-> JWT[Auth & JWT Guard]
+    end
+```
+
+## 📸 Screenshots
+
+![Dashboard Screenshot](./docs/dashboard-screenshot.png)
+*(Note: Add your dashboard screenshot here)*
+
 
 ## 🚀 Quick Start
 

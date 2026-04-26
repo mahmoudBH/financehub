@@ -38,7 +38,7 @@ services:
 
   api:
     build:
-      context: ..
+      context: .
       dockerfile: docker/Dockerfile.api
     container_name: finance_api
     restart: unless-stopped
@@ -64,7 +64,7 @@ services:
 
   web:
     build:
-      context: ..
+      context: .
       dockerfile: docker/Dockerfile.web
     container_name: finance_web
     restart: unless-stopped

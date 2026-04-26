@@ -3,7 +3,7 @@ FROM node:20-alpine AS base
 WORKDIR /app
 
 COPY apps/web/package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY apps/web/ .
 RUN npm run build
@@ -13,7 +13,7 @@ WORKDIR /app
 
 COPY --from=base /app/.next/standalone ./
 COPY --from=base /app/.next/static ./.next/static
-COPY --from=base /app/public ./public
+
 
 EXPOSE 3000
 
