@@ -12,6 +12,12 @@ const mockCryptoData = [
   { name: 'Solana', symbol: 'SOL', price: 145.80, change: 5.6, balance: 45.5, color: '#10b981' },
 ];
 
+const mockStocksData = [
+  { name: 'Apple Inc.', symbol: 'AAPL', price: 173.50, change: 1.2, balance: 15, color: '#a8a29e' },
+  { name: 'Tesla', symbol: 'TSLA', price: 198.20, change: -3.5, balance: 10, color: '#ef4444' },
+  { name: 'Nvidia', symbol: 'NVDA', price: 850.40, change: 8.4, balance: 5, color: '#22c55e' },
+];
+
 const mockChartData = [
   { date: '1W', value: 45000 },
   { date: '2W', value: 46200 },
@@ -25,7 +31,8 @@ const mockChartData = [
 export default function InvestmentsPage() {
   const [activeTab, setActiveTab] = useState('crypto');
 
-  const totalValue = mockCryptoData.reduce((acc, crypto) => acc + (crypto.price * crypto.balance), 0);
+  const activeData = activeTab === 'crypto' ? mockCryptoData : mockStocksData;
+  const totalValue = activeData.reduce((acc, asset) => acc + (asset.price * asset.balance), 0);
 
   return (
     <div className="space-y-6">
@@ -98,28 +105,28 @@ export default function InvestmentsPage() {
             <CardContent className="p-6">
               <h3 className="text-lg font-semibold mb-4 text-white">Your Assets</h3>
               <div className="space-y-4">
-                {mockCryptoData.map((crypto, index) => (
+                {activeData.map((asset, index) => (
                   <motion.div 
-                    key={crypto.symbol}
+                    key={asset.symbol}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
                     className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-800 transition-colors cursor-pointer group"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: `${crypto.color}20` }}>
-                        <Bitcoin className="w-5 h-5" style={{ color: crypto.color }} />
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: `${asset.color}20` }}>
+                        {activeTab === 'crypto' ? <Bitcoin className="w-5 h-5" style={{ color: asset.color }} /> : <PieChart className="w-5 h-5" style={{ color: asset.color }} />}
                       </div>
                       <div>
-                        <p className="font-semibold text-white">{crypto.name}</p>
-                        <p className="text-xs text-slate-400">{crypto.balance} {crypto.symbol}</p>
+                        <p className="font-semibold text-white">{asset.name}</p>
+                        <p className="text-xs text-slate-400">{asset.balance} {asset.symbol}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-white">${(crypto.price * crypto.balance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                      <p className={`text-xs flex items-center justify-end gap-1 ${crypto.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                        {crypto.change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                        {Math.abs(crypto.change)}%
+                      <p className="font-semibold text-white">${(asset.price * asset.balance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                      <p className={`text-xs flex items-center justify-end gap-1 ${asset.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                        {asset.change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                        {Math.abs(asset.change)}%
                       </p>
                     </div>
                   </motion.div>

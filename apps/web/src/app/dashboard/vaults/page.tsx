@@ -24,6 +24,9 @@ export default function VaultsPage() {
   const [accounts, setAccounts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isAddFundsModalOpen, setIsAddFundsModalOpen] = useState(false);
+  const [selectedVaultId, setSelectedVaultId] = useState<string | null>(null);
+  const [fundAmount, setFundAmount] = useState('');
   const [newVault, setNewVault] = useState({ name: '', targetAmount: '', accountId: '', isRoundUpEnabled: false });
 
   useEffect(() => {
@@ -63,15 +66,22 @@ export default function VaultsPage() {
     }
   };
 
-  const handleAddFunds = async (vaultId: string) => {
-    const amountStr = prompt('Enter amount to add to this vault:');
-    if (!amountStr) return;
-    const amount = Number(amountStr);
+  const openAddFundsModal = (vaultId: string) => {
+    setSelectedVaultId(vaultId);
+    setFundAmount('');
+    setIsAddFundsModalOpen(true);
+  };
+
+  const handleAddFunds = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedVaultId) return;
+    const amount = Number(fundAmount);
     if (isNaN(amount) || amount <= 0) return toast.error('Invalid amount');
 
     try {
-      await vaultsApi.addFunds(vaultId, { amount });
+      await vaultsApi.addFunds(selectedVaultId, { amount });
       toast.success('Funds added successfully!');
+      setIsAddFundsModalOpen(false);
       fetchData();
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to add funds');
@@ -195,7 +205,7 @@ export default function VaultsPage() {
               </div>
 
               <Button 
-                onClick={() => handleAddFunds(vault.id)}
+                onClick={() => openAddFundsModal(vault.id)}
                 className="w-full bg-slate-800 hover:bg-slate-700 text-white"
               >
                 <Coins className="w-4 h-4 mr-2" />
@@ -275,6 +285,58 @@ export default function VaultsPage() {
                   </Button>
                   <Button type="submit" className="flex-1 bg-indigo-600 hover:bg-indigo-700">
                     Create Vault
+                  </Button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Add Funds Modal */}
+      <AnimatePresence>
+        {isAddFundsModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsAddFundsModalOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-sm p-6 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl z-10"
+            >
+              <h2 className="text-xl font-bold text-white mb-6">Add Funds to Vault</h2>
+              <form onSubmit={handleAddFunds} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Amount to Add</label>
+                  <Input
+                    required
+                    type="number"
+                    min="1"
+                    step="0.01"
+                    value={fundAmount}
+                    onChange={(e) => setFundAmount(e.target.value)}
+                    placeholder="e.g. 50"
+                    className="bg-slate-800 border-slate-700 text-white text-lg h-12"
+                  />
+                </div>
+
+                <div className="flex gap-3 pt-4 mt-6 border-t border-slate-800">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsAddFundsModalOpen(false)}
+                    className="flex-1 bg-transparent border-slate-700 text-slate-300 hover:bg-slate-800"
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" className="flex-1 bg-emerald-600 hover:bg-emerald-700">
+                    Confirm Deposit
                   </Button>
                 </div>
               </form>

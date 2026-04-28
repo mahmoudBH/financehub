@@ -24,6 +24,16 @@ const brandLogos: Record<string, string> = {
   AMEX: 'AMEX',
 };
 
+const getStableCVV = (id: string) => {
+  if (!id) return '123';
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    hash = (hash << 5) - hash + id.charCodeAt(i);
+    hash |= 0;
+  }
+  return String(Math.abs(hash)).padStart(3, '0').substring(0, 3);
+};
+
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   show: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] } }),
@@ -35,6 +45,8 @@ function VirtualCard({ card, onFlip, isFlipped }: { card: any; onFlip: () => voi
 
   const rotateX = useTransform(y, [-100, 100], [15, -15]);
   const rotateY = useTransform(x, [-100, 100], [-15, 15]);
+  const glareX = useTransform(x, [-100, 100], [-50, 50]);
+  const glareY = useTransform(y, [-100, 100], [-50, 50]);
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -91,10 +103,7 @@ function VirtualCard({ card, onFlip, isFlipped }: { card: any; onFlip: () => voi
           {isHovered && !isFlipped && (
             <motion.div 
               className="absolute inset-0 bg-gradient-radial from-white/30 to-transparent opacity-40 z-10 pointer-events-none"
-              style={{
-                x: useTransform(x, [-100, 100], [-50, 50]),
-                y: useTransform(y, [-100, 100], [-50, 50]),
-              }}
+              style={{ x: glareX, y: glareY }}
             />
           )}
 
@@ -151,7 +160,7 @@ function VirtualCard({ card, onFlip, isFlipped }: { card: any; onFlip: () => voi
             <div className="px-5 md:px-6 mt-4 md:mt-6">
               <div className="bg-white/20 backdrop-blur-md border border-white/10 rounded-lg px-4 py-2 flex items-center justify-between">
                 <span className="text-[10px] uppercase text-white/80 font-semibold tracking-wider">CVV</span>
-                <span className="text-sm font-mono text-white font-bold tracking-widest">{card.cvv || '•••'}</span>
+                <span className="text-sm font-mono text-white font-bold tracking-widest">{card.cvv || getStableCVV(card.id)}</span>
               </div>
             </div>
             <div className="px-5 md:px-6 mt-3 md:mt-4 flex-1">

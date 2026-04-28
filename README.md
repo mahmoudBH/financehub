@@ -17,7 +17,7 @@
 
 ## 🎯 Overview
 
-FinanceHub is a full-stack digital banking simulator that showcases modern fintech application development. It features a complete authentication system, multi-account management, virtual cards, real-time transfers, currency exchange, and an admin supervision panel.
+FinanceHub is a full-stack digital banking simulator that showcases modern fintech application development. It features a complete authentication system, multi-account management, interactive 3D virtual cards, real-time transfers, currency exchange, AI-driven insights, Smart Savings Vaults, and an admin supervision panel. It incorporates an ultra-premium "Glassmorphism" UI/UX to match high-end banking apps.
 
 > ⚠️ **This is a simulator.** No real financial transactions are processed.
 
@@ -25,21 +25,24 @@ FinanceHub is a full-stack digital banking simulator that showcases modern finte
 
 | Feature | Description |
 |---------|-------------|
-| 🔐 **Authentication** | JWT + refresh token rotation, signup, login, password reset |
-| 💰 **Accounts** | Multiple virtual bank accounts with balance management |
-| 💳 **Virtual Cards** | Create, block, activate Visa/Mastercard/Amex cards |
-| 💸 **Transfers** | Internal transfers with fee calculation and validation |
-| 📊 **Dashboard** | Real-time financial overview with charts and analytics |
+| 🔐 **Authentication & Security** | JWT, 2FA/OTP simulation, Active Sessions management, full Security Audit Logs |
+| 💰 **Accounts & Vaults** | Multiple virtual accounts + Smart Savings Vaults with "Round-up" spare change |
+| 💳 **3D Virtual Cards** | Interactive physics-based 3D cards, create, block, activate (Visa/Mastercard/Amex) |
+| 💸 **Transfers & Split Bill** | Internal transfers with fee calculation and "Split the Bill" request tracking |
+| 📊 **Dashboard & AI Insights** | Real-time financial overview with AI-generated Smart Tips and spending analytics |
+| 📈 **Investments Portfolio** | Track simulated Crypto and Stocks (Mock API) with interactive charts |
 | 💱 **Exchange** | Live currency conversion with 8 supported currencies |
-| 🔔 **Notifications** | In-app notifications with real-time WebSocket updates |
+| 🎁 **Rewards System** | Loyalty Tiers (Standard, Premium, Metal) and Cashback points tracking |
+| 🔔 **Notifications** | In-app notifications with unread indicators and mock system events |
 | 🛡️ **Admin Panel** | User management, audit logs, transaction supervision |
-| 📱 **Responsive** | Full mobile/tablet/desktop support |
+| 📱 **Responsive UI/UX** | Glassmorphism, Framer Motion animations, mobile/tablet/desktop support |
 
 ## 🛠️ Tech Stack
 
 ### Frontend
 - **Next.js 14** (App Router) + **TypeScript**
 - **TailwindCSS** + **shadcn/ui** components
+- **Framer Motion** for 3D physics and smooth UI interactions
 - **TanStack Query** for server state
 - **Zustand** for client state
 - **Recharts** for data visualization
@@ -201,7 +204,7 @@ Full documentation available at **/api/docs** (Swagger UI)
 
 The Prisma schema includes 15 models with proper relations, indexes, and constraints:
 - User, RefreshToken, PasswordResetToken, EmailVerificationToken
-- Account, Card, Beneficiary
+- Account, Card, Beneficiary, Vault, SplitRequest
 - Transfer, Transaction, Deposit, Withdrawal
 - ExchangeRate, ExchangeHistory
 - Notification, AuditLog

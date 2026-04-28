@@ -21,40 +21,81 @@ const typeIcons: Record<string, any> = {
 
 export default function NotificationsPage() {
   const qc = useQueryClient();
-  const { data } = useQuery({ queryKey: ['notifications'], queryFn: () => notificationsApi.getAll({ limit: 50 }).then(r => r.data) });
+  const { data, isLoading } = useQuery({ queryKey: ['notifications'], queryFn: () => notificationsApi.getAll({ limit: 50 }).then(r => r.data) });
   const markReadM = useMutation({ mutationFn: (id: string) => notificationsApi.markAsRead(id), onSuccess: () => qc.invalidateQueries({ queryKey: ['notifications'] }) });
   const markAllM = useMutation({ mutationFn: () => notificationsApi.markAllAsRead(), onSuccess: () => { qc.invalidateQueries({ queryKey: ['notifications'] }); toast.success('All read'); } });
 
-  const notifications = data?.data || [];
-  const unreadCount = data?.unreadCount || 0;
+  // Use mock data if there are no notifications to show a realistic preview
+  const mockNotifications = [
+    { id: 'mock-1', type: 'SECURITY', title: 'New device sign-in', message: 'We noticed a new login from Mac OS in Paris, France.', isRead: false, createdAt: new Date().toISOString() },
+    { id: 'mock-2', type: 'TRANSFER', title: 'Transfer successful', message: 'Your transfer of €250.00 to Sophie has been completed.', isRead: false, createdAt: new Date(Date.now() - 3600000).toISOString() },
+    { id: 'mock-3', type: 'PROMOTION', title: 'Upgrade to Metal', message: 'Get 2% cashback on all purchases with our new Metal tier.', isRead: true, createdAt: new Date(Date.now() - 86400000).toISOString() },
+    { id: 'mock-4', type: 'TRANSACTION', title: 'Direct debit processed', message: 'Your Netflix subscription (€15.99) was successfully paid.', isRead: true, createdAt: new Date(Date.now() - 172800000).toISOString() },
+  ];
+
+  const dbNotifications = data?.data || [];
+  const notifications = dbNotifications.length > 0 ? dbNotifications : mockNotifications;
+  const unreadCount = dbNotifications.length > 0 ? (data?.unreadCount || 0) : mockNotifications.filter(n => !n.isRead).length;
 
   return (
-    <div className="space-y-6 animate-in">
+    <div className="space-y-6 animate-in max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
-        <div><h1 className="text-2xl font-bold">Notifications</h1><p className="text-muted-foreground mt-1">{unreadCount} unread</p></div>
-        {unreadCount > 0 && <Button variant="outline" size="sm" onClick={() => markAllM.mutate()}><CheckCheck className="w-4 h-4 mr-2" /> Mark all read</Button>}
+        <div>
+          <h1 className="text-2xl font-bold">Notifications</h1>
+          <p className="text-muted-foreground mt-1">
+            {unreadCount > 0 ? `You have ${unreadCount} unread notification${unreadCount > 1 ? 's' : ''}` : 'You are all caught up.'}
+          </p>
+        </div>
+        {unreadCount > 0 && (
+          <Button variant="outline" size="sm" onClick={() => markAllM.mutate()} className="bg-slate-900/50 backdrop-blur-md border-slate-800">
+            <CheckCheck className="w-4 h-4 mr-2 text-indigo-400" /> Mark all read
+          </Button>
+        )}
       </div>
-      <Card><CardContent className="p-0 divide-y divide-border/50">
-        {notifications.length === 0 ? (
-          <div className="p-12 text-center"><Bell className="w-12 h-12 text-muted-foreground mx-auto mb-4" /><h3 className="text-lg font-semibold">All caught up!</h3></div>
-        ) : notifications.map((n: any) => {
-          const ti = typeIcons[n.type] || typeIcons.SYSTEM;
-          const Icon = ti.icon;
-          return (
-            <div key={n.id} className={`flex items-start gap-4 p-4 hover:bg-muted/30 transition-colors cursor-pointer ${!n.isRead ? 'bg-primary/[0.02]' : ''}`} onClick={() => !n.isRead && markReadM.mutate(n.id)}>
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${ti.color}`}><Icon className="w-5 h-5" /></div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-0.5">
-                  <p className={`text-sm font-medium ${!n.isRead ? '' : 'text-muted-foreground'}`}>{n.title}</p>
-                  {!n.isRead && <div className="w-2 h-2 rounded-full bg-primary" />}
-                </div>
-                <p className="text-sm text-muted-foreground line-clamp-2">{n.message}</p>
-                <span className="text-xs text-muted-foreground mt-1 block">{formatRelativeTime(n.createdAt)}</span>
+
+      <Card className="glass-card border-slate-800 bg-slate-900/50 overflow-hidden">
+        <CardContent className="p-0">
+          {isLoading ? (
+             <div className="p-12 text-center text-muted-foreground">Loading notifications...</div>
+          ) : notifications.length === 0 ? (
+            <div className="p-16 text-center">
+              <div className="w-20 h-20 rounded-full bg-slate-800/50 flex items-center justify-center mx-auto mb-6">
+                <Bell className="w-10 h-10 text-slate-500" />
               </div>
+              <h3 className="text-xl font-semibold mb-2 text-white">All caught up!</h3>
+              <p className="text-slate-400">You don't have any new notifications at the moment.</p>
             </div>
-          );
-        })}
-      </CardContent></Card>
+          ) : (
+            <div className="divide-y divide-slate-800/50">
+              {notifications.map((n: any) => {
+                const ti = typeIcons[n.type] || typeIcons.SYSTEM;
+                const Icon = ti.icon;
+                return (
+                  <div 
+                    key={n.id} 
+                    className={`flex items-start gap-4 p-5 hover:bg-slate-800/40 transition-all cursor-pointer ${!n.isRead ? 'bg-indigo-500/5' : ''}`} 
+                    onClick={() => !n.isRead && !n.id.startsWith('mock') && markReadM.mutate(n.id)}
+                  >
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner ${ti.color}`}>
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <div className="flex items-center gap-2">
+                          <p className={`text-base font-medium ${!n.isRead ? 'text-white' : 'text-slate-300'}`}>{n.title}</p>
+                          {!n.isRead && <div className="w-2 h-2 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)]" />}
+                        </div>
+                        <span className="text-xs text-slate-500 whitespace-nowrap">{formatRelativeTime(n.createdAt)}</span>
+                      </div>
+                      <p className={`text-sm line-clamp-2 ${!n.isRead ? 'text-slate-300' : 'text-slate-500'}`}>{n.message}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
