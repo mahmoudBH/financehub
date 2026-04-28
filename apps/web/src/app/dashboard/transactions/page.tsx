@@ -6,9 +6,12 @@ import { formatCurrency, formatDateTime, getStatusColor } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TableSkeleton } from '@/components/ui/skeleton';
-import { Receipt, Search, Filter, ArrowDownLeft, ArrowUpRight, RefreshCw, Download } from 'lucide-react';
+import { Receipt, Search, Filter, ArrowDownLeft, ArrowUpRight, RefreshCw, Download, Users, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { toast } from 'sonner';
+import { splitRequestsApi } from '@/lib/api';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const typeIcons: Record<string, any> = {
   DEPOSIT: { icon: ArrowDownLeft, color: 'text-emerald-500 bg-emerald-500/10' },
@@ -29,6 +32,31 @@ export default function TransactionsPage() {
 
   const transactions = data?.data || [];
   const meta = data?.meta || { total: 0, page: 1, totalPages: 1 };
+
+  const [splitModalOpen, setSplitModalOpen] = useState(false);
+  const [selectedTxn, setSelectedTxn] = useState<any>(null);
+  const [splitData, setSplitData] = useState({ requestedFrom: '', amount: '' });
+
+  const handleOpenSplit = (txn: any) => {
+    setSelectedTxn(txn);
+    setSplitData({ requestedFrom: '', amount: (Number(txn.amount) / 2).toString() });
+    setSplitModalOpen(true);
+  };
+
+  const submitSplitRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await splitRequestsApi.create({
+        transactionId: selectedTxn.id,
+        requestedFrom: splitData.requestedFrom,
+        amount: Number(splitData.amount),
+      });
+      toast.success(`Split request sent to ${splitData.requestedFrom}`);
+      setSplitModalOpen(false);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to create split request');
+    }
+  };
 
   return (
     <div className="space-y-6 animate-in">
@@ -88,7 +116,18 @@ export default function TransactionsPage() {
                     <div className="col-span-2 hidden md:block"><p className="text-xs text-muted-foreground font-mono">{txn.reference?.slice(0,16)}</p></div>
                     <div className="col-span-2 hidden md:block"><p className="text-sm text-muted-foreground">{formatDateTime(txn.createdAt)}</p></div>
                     <div className="col-span-2 text-right"><p className={`text-sm font-semibold ${isIncome ? 'text-emerald-500' : 'text-red-500'}`}>{isIncome ? '+' : '-'}{formatCurrency(Number(txn.amount), txn.currency)}</p></div>
-                    <div className="col-span-2 text-right"><Badge variant={txn.status === 'COMPLETED' ? 'success' : txn.status === 'FAILED' ? 'destructive' : 'warning'}>{txn.status}</Badge></div>
+                    <div className="col-span-2 text-right">
+                      <Badge variant={txn.status === 'COMPLETED' ? 'success' : txn.status === 'FAILED' ? 'destructive' : 'warning'}>{txn.status}</Badge>
+                      {!isIncome && txn.status === 'COMPLETED' && (
+                        <button
+                          onClick={() => handleOpenSplit(txn)}
+                          className="ml-3 text-muted-foreground hover:text-indigo-400 transition-colors"
+                          title="Split this bill"
+                        >
+                          <Users className="w-4 h-4 inline" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 );
               })}
@@ -104,6 +143,39 @@ export default function TransactionsPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Split Request Modal */}
+      <AnimatePresence>
+        {splitModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSplitModalOpen(false)} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative w-full max-w-md p-6 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl z-10">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-bold">Split the Bill</h2>
+                <button onClick={() => setSplitModalOpen(false)} className="text-muted-foreground hover:text-white"><X className="w-5 h-5" /></button>
+              </div>
+              <div className="p-4 bg-slate-800/50 rounded-xl mb-6">
+                <p className="text-sm font-medium">{selectedTxn?.description}</p>
+                <p className="text-2xl font-bold text-red-400 mt-1">{formatCurrency(Number(selectedTxn?.amount), selectedTxn?.currency)}</p>
+              </div>
+              <form onSubmit={submitSplitRequest} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Who are you splitting with?</label>
+                  <input required value={splitData.requestedFrom} onChange={(e) => setSplitData({...splitData, requestedFrom: e.target.value})} placeholder="Name or Email" className="w-full bg-slate-800 border border-slate-700 text-white rounded-md h-10 px-3" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Amount they owe</label>
+                  <input required type="number" step="0.01" max={selectedTxn?.amount} value={splitData.amount} onChange={(e) => setSplitData({...splitData, amount: e.target.value})} className="w-full bg-slate-800 border border-slate-700 text-white rounded-md h-10 px-3" />
+                </div>
+                <div className="flex gap-3 pt-4 border-t border-slate-800">
+                  <Button type="button" variant="outline" onClick={() => setSplitModalOpen(false)} className="flex-1 bg-transparent border-slate-700 text-slate-300 hover:bg-slate-800">Cancel</Button>
+                  <Button type="submit" className="flex-1 bg-indigo-600 hover:bg-indigo-700">Send Request</Button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

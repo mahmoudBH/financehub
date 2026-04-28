@@ -36,6 +36,8 @@ export class UsersService {
         preferredCurrency: true,
         language: true,
         timezone: true,
+        tier: true,
+        cashbackPoints: true,
         lastLoginAt: true,
         createdAt: true,
       },
@@ -133,5 +135,50 @@ export class UsersService {
     });
 
     return user;
+  }
+
+  async getSecurityLogs(userId: string) {
+    return this.prisma.auditLog.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      take: 20,
+    });
+  }
+
+  async getActiveSessions(userId: string) {
+    return this.prisma.refreshToken.findMany({
+      where: { userId, revokedAt: null },
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        userAgent: true,
+        ipAddress: true,
+        createdAt: true,
+        expiresAt: true,
+      },
+    });
+  }
+
+  async revokeSession(userId: string, sessionId: string) {
+    const session = await this.prisma.refreshToken.findFirst({
+      where: { id: sessionId, userId },
+    });
+
+    if (!session) {
+      throw new NotFoundException('Session not found');
+    }
+
+    await this.prisma.refreshToken.update({
+      where: { id: sessionId },
+      data: { revokedAt: new Date() },
+    });
+
+    await this.auditService.log({
+      action: 'SESSION_REVOKED',
+      userId,
+      description: `Revoked session from IP: ${session.ipAddress || 'unknown'}`,
+    });
+
+    return { success: true };
   }
 }

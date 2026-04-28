@@ -24,6 +24,9 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { AuditModule } from './modules/audit/audit.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { WebsocketModule } from './modules/websocket/websocket.module';
+import { VaultsModule } from './modules/vaults/vaults.module';
+import { InsightsModule } from './modules/insights/insights.module';
+import { SplitRequestsModule } from './modules/split-requests/split-requests.module';
 
 @Module({
   imports: [
@@ -57,6 +60,9 @@ import { WebsocketModule } from './modules/websocket/websocket.module';
     AuditModule,
     AdminModule,
     WebsocketModule,
+    VaultsModule,
+    InsightsModule,
+    SplitRequestsModule,
   ],
   providers: [
     {

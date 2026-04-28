@@ -6,16 +6,17 @@ import { useAuthStore } from '@/store/auth-store';
 import { Landmark } from 'lucide-react';
 
 export default function HomePage() {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, _hasHydrated } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
+    if (!_hasHydrated) return;
     if (isAuthenticated) {
       router.push('/dashboard');
     } else {
       router.push('/login');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, _hasHydrated, router]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 gradient-mesh">

@@ -10,7 +10,7 @@ import { CreditCard, Plus, Lock, Unlock, Trash2, Wifi, Eye, EyeOff } from 'lucid
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { cn, maskCardNumber } from '@/lib/utils';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 
 const brandColors: Record<string, string> = {
   VISA: 'from-indigo-600 via-blue-500 to-cyan-400',
@@ -30,46 +30,106 @@ const fadeUp = {
 };
 
 function VirtualCard({ card, onFlip, isFlipped }: { card: any; onFlip: () => void; isFlipped: boolean }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const rotateX = useTransform(y, [-100, 100], [15, -15]);
+  const rotateY = useTransform(x, [-100, 100], [-15, 15]);
+
+  const [isHovered, setIsHovered] = useState(false);
+
+  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+    if (isFlipped) return; // Disable tilt when flipped
+    const rect = event.currentTarget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    x.set(event.clientX - centerX);
+    y.set(event.clientY - centerY);
+  }
+
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+    setIsHovered(false);
+  }
+
   return (
-    <div className="perspective-1000 cursor-pointer" onClick={onFlip} style={{ perspective: '1000px' }}>
+    <div 
+      className="perspective-1000 cursor-pointer w-full relative group" 
+      onClick={onFlip} 
+      style={{ perspective: '1000px' }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+    >
       <motion.div
         className="relative w-full aspect-[1.586/1]"
-        animate={{ rotateY: isFlipped ? 180 : 0 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        style={{ transformStyle: 'preserve-3d' }}
+        animate={{ 
+          rotateY: isFlipped ? 180 : 0,
+          scale: isHovered && !isFlipped ? 1.05 : 1,
+        }}
+        style={{ 
+          rotateX: isFlipped ? 0 : rotateX,
+          rotateY: isFlipped ? 180 : rotateY,
+          transformStyle: 'preserve-3d' 
+        }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20, mass: 0.5 }}
       >
         {/* Front */}
         <div
           className={cn(
-            'absolute inset-0 rounded-2xl p-5 md:p-6 text-white overflow-hidden bg-gradient-to-br',
-            'shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)]',
+            'absolute inset-0 rounded-2xl p-5 md:p-6 text-white overflow-hidden bg-gradient-to-br transition-shadow duration-300',
+            isHovered && !isFlipped ? 'shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_40px_rgba(99,102,241,0.4)]' : 'shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)]',
             brandColors[card.brand] || brandColors.VISA,
           )}
           style={{ backfaceVisibility: 'hidden' }}
         >
-          {/* Pattern overlay */}
-          <div className="absolute inset-0 opacity-[0.07]" style={{
-            backgroundImage: `radial-gradient(circle at 20% 80%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)`,
-            backgroundSize: '30px 30px',
-          }} />
+          {/* Glassmorphism Overlays */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/0 opacity-50 z-0 mix-blend-overlay pointer-events-none" />
+          
+          {/* Dynamic Glare */}
+          {isHovered && !isFlipped && (
+            <motion.div 
+              className="absolute inset-0 bg-gradient-radial from-white/30 to-transparent opacity-40 z-10 pointer-events-none"
+              style={{
+                x: useTransform(x, [-100, 100], [-50, 50]),
+                y: useTransform(y, [-100, 100], [-50, 50]),
+              }}
+            />
+          )}
 
-          <div className="relative z-10 flex flex-col h-full justify-between">
+          {/* Decorative shapes */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-3xl rounded-full -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/10 blur-2xl rounded-full translate-y-1/4 -translate-x-1/4 pointer-events-none" />
+
+          <div className="relative z-20 flex flex-col h-full justify-between" style={{ transform: "translateZ(30px)" }}>
             <div className="flex items-center justify-between">
-              <Wifi className="w-5 h-5 md:w-6 md:h-6 rotate-90 opacity-80" />
-              <span className="text-[10px] md:text-xs font-medium opacity-70 uppercase tracking-wider">{card.type}</span>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold tracking-wider text-white/90 drop-shadow-md">FINANCE HUB</span>
+                <span className="text-[10px] font-medium text-white/70 uppercase tracking-widest mt-0.5">{card.type}</span>
+              </div>
+              <Wifi className="w-5 h-5 md:w-6 md:h-6 rotate-90 text-white/80 drop-shadow-md" />
             </div>
+
+            {/* Smart Chip */}
+            <div className="w-10 h-7 md:w-12 md:h-9 rounded-md bg-gradient-to-br from-yellow-200 to-yellow-500 shadow-inner flex items-center justify-center overflow-hidden border border-yellow-600/30">
+              <div className="w-full h-full border border-yellow-600/20 rounded-sm m-0.5 grid grid-cols-3 grid-rows-3 gap-0.5 opacity-50">
+                {[...Array(9)].map((_, i) => <div key={i} className="border border-yellow-800/20 rounded-[1px]" />)}
+              </div>
+            </div>
+
             <div>
-              <p className="text-base md:text-lg font-mono tracking-[0.15em] mb-3 md:mb-4">{maskCardNumber(card.last4)}</p>
+              <p className="text-base md:text-xl font-mono tracking-[0.15em] mb-2 md:mb-4 drop-shadow-md">{maskCardNumber(card.last4)}</p>
               <div className="flex items-end justify-between">
                 <div>
-                  <p className="text-[9px] md:text-[10px] uppercase opacity-50 tracking-wider">Cardholder</p>
-                  <p className="text-xs md:text-sm font-medium">{card.cardholderName}</p>
+                  <p className="text-[8px] md:text-[10px] uppercase text-white/60 font-semibold tracking-wider mb-0.5">Cardholder</p>
+                  <p className="text-xs md:text-sm font-medium tracking-widest drop-shadow-md">{card.cardholderName}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[9px] md:text-[10px] uppercase opacity-50 tracking-wider">Expires</p>
-                  <p className="text-xs md:text-sm font-medium">{String(card.expiryMonth).padStart(2, '0')}/{card.expiryYear}</p>
+                  <p className="text-[8px] md:text-[10px] uppercase text-white/60 font-semibold tracking-wider mb-0.5">Expires</p>
+                  <p className="text-xs md:text-sm font-medium font-mono drop-shadow-md">{String(card.expiryMonth).padStart(2, '0')}/{card.expiryYear}</p>
                 </div>
-                <p className="text-lg md:text-xl font-bold opacity-90">{brandLogos[card.brand] || card.brand}</p>
+                <p className="text-lg md:text-xl font-bold opacity-90 drop-shadow-lg italic">{brandLogos[card.brand] || card.brand}</p>
               </div>
             </div>
           </div>
@@ -86,22 +146,22 @@ function VirtualCard({ card, onFlip, isFlipped }: { card: any; onFlip: () => voi
         >
           <div className="relative z-10 flex flex-col h-full">
             {/* Mag stripe */}
-            <div className="w-full h-10 md:h-12 bg-black/40 mt-5 md:mt-6" />
+            <div className="w-full h-10 md:h-12 bg-black/60 mt-5 md:mt-6 shadow-inner" />
             {/* CVV */}
             <div className="px-5 md:px-6 mt-4 md:mt-6">
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 flex items-center justify-between">
-                <span className="text-[10px] uppercase text-white/60 tracking-wider">CVV</span>
-                <span className="text-sm font-mono text-white font-bold tracking-widest">•••</span>
+              <div className="bg-white/20 backdrop-blur-md border border-white/10 rounded-lg px-4 py-2 flex items-center justify-between">
+                <span className="text-[10px] uppercase text-white/80 font-semibold tracking-wider">CVV</span>
+                <span className="text-sm font-mono text-white font-bold tracking-widest">{card.cvv || '•••'}</span>
               </div>
             </div>
             <div className="px-5 md:px-6 mt-3 md:mt-4 flex-1">
-              <p className="text-[9px] md:text-[10px] text-white/40 leading-relaxed">
-                This card is issued by FinanceHub for simulation purposes only. Not valid for real transactions.
+              <p className="text-[9px] md:text-[10px] text-white/50 leading-relaxed font-medium">
+                This card is issued by FinanceHub. If found, please return to the nearest branch. Not valid for unauthorized transactions.
               </p>
             </div>
             <div className="px-5 md:px-6 pb-4 md:pb-5 flex justify-between items-center">
-              <span className="text-[10px] text-white/50">Tap to flip</span>
-              <span className="text-sm font-bold text-white/80">{brandLogos[card.brand] || card.brand}</span>
+              <span className="text-[10px] text-white/60 font-semibold tracking-wider">TAP TO FLIP</span>
+              <span className="text-sm font-bold text-white/90 drop-shadow-md italic">{brandLogos[card.brand] || card.brand}</span>
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { User, Shield, Key, Globe } from 'lucide-react';
+import { User, Shield, Key, Globe, Crown, Star } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
 
@@ -44,7 +44,11 @@ export default function ProfilePage() {
           <div className="flex items-center gap-4 mb-4">
             <div className="w-16 h-16 rounded-full gradient-primary flex items-center justify-center text-2xl font-bold text-white">{authUser?.firstName?.charAt(0)}{authUser?.lastName?.charAt(0)}</div>
             <div><p className="text-lg font-semibold">{profile?.firstName} {profile?.lastName}</p><p className="text-sm text-muted-foreground">{profile?.email}</p>
-              <div className="flex gap-2 mt-1"><Badge variant={profile?.kycStatus === 'VERIFIED' ? 'success' : 'warning'}>{profile?.kycStatus || 'PENDING'}</Badge><Badge variant="outline">{profile?.role}</Badge></div>
+              <div className="flex gap-2 mt-1">
+                <Badge variant={profile?.kycStatus === 'VERIFIED' ? 'success' : 'warning'}>{profile?.kycStatus || 'PENDING'}</Badge>
+                <Badge variant="outline">{profile?.role}</Badge>
+                <Badge variant="default" className="bg-gradient-to-r from-amber-400 to-amber-600 text-white border-0"><Crown className="w-3 h-3 mr-1"/> {profile?.tier || 'STANDARD'}</Badge>
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -56,6 +60,35 @@ export default function ProfilePage() {
             <div><label className="block text-sm font-medium mb-1">Postal Code</label><Input defaultValue={profile?.postalCode} onChange={(e) => setForm({...form, postalCode: e.target.value})} /></div>
           </div>
           <Button onClick={() => updateM.mutate(form)} loading={updateM.isPending}>Save Changes</Button>
+        </CardContent>
+      </Card>
+
+      {/* Rewards & Tiers */}
+      <Card className="border-amber-500/20 bg-amber-500/5">
+        <CardHeader><CardTitle className="flex items-center gap-2 text-amber-500"><Star className="w-5 h-5" /> Rewards & Benefits</CardTitle></CardHeader>
+        <CardContent>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div>
+              <p className="text-sm text-muted-foreground">Current Tier</p>
+              <p className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-amber-600">{profile?.tier || 'STANDARD'} MEMBER</p>
+              <p className="text-xs text-muted-foreground mt-2">Unlock more benefits by upgrading your tier.</p>
+            </div>
+            <div className="text-center sm:text-right">
+              <p className="text-sm text-muted-foreground">Cashback Points</p>
+              <p className="text-3xl font-bold text-amber-500">{profile?.cashbackPoints || 0}</p>
+              <Button variant="outline" size="sm" className="mt-2 border-amber-500/50 text-amber-500 hover:bg-amber-500/10 hover:text-amber-400">Redeem Points</Button>
+            </div>
+          </div>
+          <div className="mt-6 pt-6 border-t border-amber-500/10">
+            <div className="flex justify-between text-xs font-medium mb-2">
+              <span className="text-muted-foreground">Standard</span>
+              <span className="text-amber-500">Premium</span>
+              <span className="text-slate-400">Metal</span>
+            </div>
+            <div className="w-full h-2 rounded-full bg-slate-800">
+              <div className="h-full rounded-full bg-gradient-to-r from-amber-400 to-amber-600 w-1/2"></div>
+            </div>
+          </div>
         </CardContent>
       </Card>
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { accountsApi, transactionsApi } from '@/lib/api';
+import { accountsApi, transactionsApi, insightsApi } from '@/lib/api';
 import { useAuthStore } from '@/store/auth-store';
 import { formatCurrency, formatRelativeTime } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -78,11 +78,18 @@ export default function DashboardPage() {
     retry: false,
   });
 
+  const { data: insightsRes } = useQuery({
+    queryKey: ['insights'],
+    queryFn: () => insightsApi.getInsights().then(r => r.data),
+    retry: false,
+  });
+
   const totalBalance = accountsData?.totalBalance ?? 85550.50;
   const accounts = accountsData?.accounts ?? [];
   const income = statsData?.income ?? 28700;
   const expenses = statsData?.expenses ?? 12400;
   const chartData = statsData?.chartData?.length > 0 ? statsData.chartData : demoChartData;
+  const insightsData = insightsRes || { summary: 'Your food spending is 15% higher than last month' };
   const greeting = new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening';
 
   if (isLoading) return <DashboardSkeleton />;
@@ -109,9 +116,9 @@ export default function DashboardPage() {
       {/* Stat Cards */}
       <motion.div variants={fadeUp} className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {/* Total Balance */}
-        <Card className="col-span-2 lg:col-span-1 relative overflow-hidden card-hover">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-indigo-500/10 to-transparent rounded-bl-full" />
-          <CardContent className="p-5 md:p-6">
+        <Card className="col-span-2 lg:col-span-1 relative overflow-hidden glass-card hover:-translate-y-1 transition-all duration-300">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-indigo-500/20 to-transparent rounded-bl-full" />
+          <CardContent className="p-5 md:p-6 relative z-10">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs md:text-sm font-medium text-muted-foreground">Total Balance</span>
               <div className="w-9 h-9 rounded-xl bg-indigo-500/10 flex items-center justify-center">
@@ -128,9 +135,9 @@ export default function DashboardPage() {
         </Card>
 
         {/* Income */}
-        <Card className="relative overflow-hidden card-hover">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-500/10 to-transparent rounded-bl-full" />
-          <CardContent className="p-5 md:p-6">
+        <Card className="relative overflow-hidden glass-card hover:-translate-y-1 transition-all duration-300">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-500/20 to-transparent rounded-bl-full" />
+          <CardContent className="p-5 md:p-6 relative z-10">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs md:text-sm font-medium text-muted-foreground">Income</span>
               <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center">
@@ -143,9 +150,9 @@ export default function DashboardPage() {
         </Card>
 
         {/* Expenses */}
-        <Card className="relative overflow-hidden card-hover">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-red-500/10 to-transparent rounded-bl-full" />
-          <CardContent className="p-5 md:p-6">
+        <Card className="relative overflow-hidden glass-card hover:-translate-y-1 transition-all duration-300">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-red-500/20 to-transparent rounded-bl-full" />
+          <CardContent className="p-5 md:p-6 relative z-10">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs md:text-sm font-medium text-muted-foreground">Expenses</span>
               <div className="w-9 h-9 rounded-xl bg-red-500/10 flex items-center justify-center">
@@ -158,9 +165,9 @@ export default function DashboardPage() {
         </Card>
 
         {/* Active Cards */}
-        <Card className="relative overflow-hidden card-hover">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-purple-500/10 to-transparent rounded-bl-full" />
-          <CardContent className="p-5 md:p-6">
+        <Card className="relative overflow-hidden glass-card hover:-translate-y-1 transition-all duration-300">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-purple-500/20 to-transparent rounded-bl-full" />
+          <CardContent className="p-5 md:p-6 relative z-10">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs md:text-sm font-medium text-muted-foreground">Cards</span>
               <div className="w-9 h-9 rounded-xl bg-purple-500/10 flex items-center justify-center">
@@ -179,9 +186,9 @@ export default function DashboardPage() {
         <div className="grid grid-cols-4 gap-2 md:gap-3">
           {quickActions.map((action) => (
             <Link key={action.label} href={action.href}>
-              <Card className="group cursor-pointer card-hover border-transparent hover:border-primary/20">
+              <Card className="group cursor-pointer glass-card border-transparent hover:border-primary/30 transition-all duration-300">
                 <CardContent className="p-3 md:p-4 flex flex-col items-center text-center gap-2">
-                  <div className={`w-10 h-10 md:w-11 md:h-11 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg`}>
+                  <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-lg shadow-indigo-500/20`}>
                     <action.icon className="w-4 h-4 md:w-5 md:h-5 text-white" />
                   </div>
                   <span className="text-[11px] md:text-xs font-medium">{action.label}</span>
@@ -195,7 +202,7 @@ export default function DashboardPage() {
       {/* Charts Row */}
       <motion.div variants={fadeUp} className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
         {/* Revenue Chart */}
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 glass-card">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base md:text-lg">Revenue & Expenses</CardTitle>
@@ -247,7 +254,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* Spending Breakdown */}
-        <Card>
+        <Card className="glass-card">
           <CardHeader className="pb-2">
             <CardTitle className="text-base md:text-lg">Spending Breakdown</CardTitle>
           </CardHeader>
@@ -299,7 +306,7 @@ export default function DashboardPage() {
       {/* Activity + Accounts Row */}
       <motion.div variants={fadeUp} className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Recent Activity */}
-        <Card>
+        <Card className="glass-card">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base md:text-lg">Recent Activity</CardTitle>
@@ -344,7 +351,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* Accounts Overview */}
-        <Card>
+        <Card className="glass-card">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base md:text-lg">Your Accounts</CardTitle>
@@ -395,7 +402,7 @@ export default function DashboardPage() {
 
       {/* Financial Insights */}
       <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-        <Card className="card-hover border-emerald-500/20 bg-emerald-500/5">
+        <Card className="glass-card border-emerald-500/30 bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors">
           <CardContent className="p-5 flex items-start gap-4">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
               <Target className="w-5 h-5 text-emerald-500" />
@@ -415,19 +422,19 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="card-hover border-amber-500/20 bg-amber-500/5">
+        <Card className="glass-card border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 transition-colors">
           <CardContent className="p-5 flex items-start gap-4">
             <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
               <Zap className="w-5 h-5 text-amber-500" />
             </div>
             <div>
-              <p className="text-sm font-semibold">Smart Tip</p>
-              <p className="text-xs text-muted-foreground mt-0.5">Your food spending is 15% higher than last month</p>
+              <p className="text-sm font-semibold text-amber-500">AI Financial Insight</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{insightsData.summary}</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="card-hover border-indigo-500/20 bg-indigo-500/5">
+        <Card className="glass-card border-indigo-500/30 bg-indigo-500/5 hover:bg-indigo-500/10 transition-colors">
           <CardContent className="p-5 flex items-start gap-4">
             <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center flex-shrink-0">
               <Bell className="w-5 h-5 text-indigo-500" />

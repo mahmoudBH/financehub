@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Wallet, CreditCard, ArrowLeftRight, Receipt,
   ArrowDownUp, RefreshCw, Bell, User, Shield, Settings, LogOut,
-  ChevronLeft, Landmark, X,
+  ChevronLeft, Landmark, X, Target, TrendingUp,
 } from 'lucide-react';
 
 const navigation = [
@@ -20,6 +20,8 @@ const navigation = [
   { name: 'Transactions', href: '/dashboard/transactions', icon: Receipt },
   { name: 'Operations', href: '/dashboard/operations', icon: ArrowDownUp },
   { name: 'Exchange', href: '/dashboard/exchange', icon: RefreshCw },
+  { name: 'Investments', href: '/dashboard/investments', icon: TrendingUp },
+  { name: 'Vaults', href: '/dashboard/vaults', icon: Target },
   { name: 'Notifications', href: '/dashboard/notifications', icon: Bell },
 ];
 

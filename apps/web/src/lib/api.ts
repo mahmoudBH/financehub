@@ -85,6 +85,9 @@ export const usersApi = {
   updateProfile: (data: any) => api.patch('/users/me', data),
   changePassword: (data: any) => api.patch('/users/me/password', data),
   updateSettings: (data: any) => api.patch('/users/me/settings', data),
+  getSecurityLogs: () => api.get('/users/me/security-logs'),
+  getActiveSessions: () => api.get('/users/me/sessions'),
+  revokeSession: (id: string) => api.delete(`/users/me/sessions/${id}`),
 };
 
 // Accounts
@@ -156,4 +159,26 @@ export const adminApi = {
   unfreezeUser: (id: string) => api.patch(`/admin/users/${id}/unfreeze`),
   getAuditLogs: (params?: any) => api.get('/admin/audit-logs', { params }),
   getTransactions: (params?: any) => api.get('/admin/transactions', { params }),
+};
+
+// Vaults
+export const vaultsApi = {
+  getAll: () => api.get('/vaults'),
+  getOne: (id: string) => api.get(`/vaults/${id}`),
+  create: (data: any) => api.post('/vaults', data),
+  update: (id: string, data: any) => api.patch(`/vaults/${id}`, data),
+  addFunds: (id: string, data: { amount: number }) => api.patch(`/vaults/${id}/add-funds`, data),
+  delete: (id: string) => api.delete(`/vaults/${id}`),
+};
+
+// Split Requests
+export const splitRequestsApi = {
+  create: (data: any) => api.post('/split-requests', data),
+  getAll: () => api.get('/split-requests'),
+  markAsPaid: (id: string) => api.patch(`/split-requests/${id}/pay`),
+};
+
+// Insights
+export const insightsApi = {
+  getInsights: () => api.get('/insights'),
 };

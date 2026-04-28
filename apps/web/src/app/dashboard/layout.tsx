@@ -16,17 +16,18 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, _hasHydrated } = useAuthStore();
   const { isSidebarCollapsed } = useUIStore();
   const router = useRouter();
 
   useEffect(() => {
+    if (!_hasHydrated) return;
     if (!isAuthenticated) {
       router.push('/login');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, _hasHydrated, router]);
 
-  if (!isAuthenticated) {
+  if (!_hasHydrated || !isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <motion.div
@@ -49,14 +50,20 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative selection:bg-indigo-500/30 overflow-x-hidden">
+      {/* Ambient Luxury Background */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500/10 dark:bg-indigo-500/5 blur-[120px] rounded-full animate-float" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-500/10 dark:bg-purple-500/5 blur-[150px] rounded-full animate-float" style={{ animationDelay: '2s' }} />
+      </div>
+
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main Content — adapts to sidebar width with luxury easing */}
       <div
         className={cn(
-          'transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
+          'relative z-10 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
           // Desktop: follow sidebar width exactly
           'lg:ml-[280px]',
           isSidebarCollapsed && 'lg:ml-[80px]',

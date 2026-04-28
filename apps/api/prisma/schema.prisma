@@ -37,6 +37,8 @@ model User {
   preferredCurrency String      @default("EUR")
   language          String      @default("en")
   timezone          String      @default("Europe/Paris")
+  tier              String      @default("STANDARD")    // STANDARD, PREMIUM, METAL
+  cashbackPoints    Int         @default(0)
   lastLoginAt       DateTime?
   lastLoginIp       String?
   createdAt         DateTime    @default(now())
@@ -57,6 +59,8 @@ model User {
   emailVerificationTokens EmailVerificationToken[]
   beneficiaries         Beneficiary[]       @relation("UserBeneficiaries")
   beneficiaryOf         Beneficiary[]       @relation("BeneficiaryUser")
+  vaults                Vault[]
+  splitRequests         SplitRequest[]
 
   @@index([email])
   @@index([status])
@@ -134,6 +138,7 @@ model Account {
   withdrawals   Withdrawal[]
   exchangeFrom  ExchangeHistory[] @relation("ExchangeFromAccount")
   exchangeTo    ExchangeHistory[] @relation("ExchangeToAccount")
+  vaults        Vault[]
 
   @@index([userId])
   @@index([accountNumber])
@@ -257,6 +262,7 @@ model Transaction {
   deposit     Deposit?          @relation(fields: [depositId], references: [id])
   withdrawal  Withdrawal?       @relation(fields: [withdrawalId], references: [id])
   exchange    ExchangeHistory?  @relation(fields: [exchangeId], references: [id])
+  splitRequests SplitRequest[]
 
   @@index([userId])
   @@index([accountId])
@@ -396,4 +402,43 @@ model AuditLog {
   @@index([createdAt])
   @@index([targetId])
   @@map("audit_logs")
+}
+
+model Vault {
+  id               String   @id @default(uuid())
+  name             String
+  targetAmount     Decimal
+  currentAmount    Decimal  @default(0)
+  color            String   @default("indigo")
+  icon             String   @default("target")
+  isRoundUpEnabled Boolean  @default(false)
+  userId           String
+  accountId        String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account          Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([accountId])
+  @@map("vaults")
+}
+
+model SplitRequest {
+  id            String   @id @default(uuid())
+  transactionId String
+  requestedFrom String   // Name or email of mock contact
+  amount        Decimal
+  status        String   @default("PENDING") // PENDING, PAID, CANCELLED
+  userId        String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([transactionId])
+  @@index([userId])
+  @@map("split_requests")
 }

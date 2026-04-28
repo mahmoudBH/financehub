@@ -8,13 +8,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ArrowLeftRight, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { ArrowLeftRight, Send, CheckCircle, AlertCircle, Shield } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function TransfersPage() {
   const qc = useQueryClient();
-  const [step, setStep] = useState<'form'|'confirm'|'success'|'error'>('form');
+  const [step, setStep] = useState<'form'|'confirm'|'otp'|'success'|'error'>('form');
   const [form, setForm] = useState({ sourceAccountId: '', destinationAccountId: '', amount: '', description: '' });
+  const [otp, setOtp] = useState('');
   const [result, setResult] = useState<any>(null);
 
   const { data: accs } = useQuery({ queryKey: ['accounts'], queryFn: () => accountsApi.getAll().then(r => r.data) });
@@ -85,7 +86,44 @@ export default function TransfersPage() {
                   </div>
                   <div className="flex gap-2">
                     <Button variant="outline" onClick={() => setStep('form')} className="flex-1">Back</Button>
-                    <Button onClick={() => transferM.mutate({ sourceAccountId: form.sourceAccountId, destinationAccountId: form.destinationAccountId || undefined, amount: Number(form.amount), description: form.description })} loading={transferM.isPending} className="flex-1">Confirm Transfer</Button>
+                    <Button onClick={() => setStep('otp')} className="flex-1 bg-indigo-600 hover:bg-indigo-700">Continue</Button>
+                  </div>
+                </div>
+              )}
+              {step === 'otp' && (
+                <div className="space-y-6 text-center py-4">
+                  <div className="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center mx-auto mb-4">
+                    <Shield className="w-8 h-8 text-indigo-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold mb-2">Two-Factor Authentication</h3>
+                    <p className="text-muted-foreground text-sm">Please enter the 6-digit code sent to your device to authorize this transfer.</p>
+                  </div>
+                  <div className="max-w-[200px] mx-auto">
+                    <Input 
+                      type="text" 
+                      placeholder="123456" 
+                      maxLength={6}
+                      className="text-center text-2xl tracking-widest font-mono h-14"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                    />
+                  </div>
+                  <div className="flex gap-2 pt-4">
+                    <Button variant="outline" onClick={() => setStep('confirm')} className="flex-1">Cancel</Button>
+                    <Button 
+                      onClick={() => transferM.mutate({ 
+                        sourceAccountId: form.sourceAccountId, 
+                        destinationAccountId: form.destinationAccountId || undefined, 
+                        amount: Number(form.amount), 
+                        description: form.description 
+                      })} 
+                      loading={transferM.isPending} 
+                      disabled={otp.length !== 6}
+                      className="flex-1 bg-emerald-600 hover:bg-emerald-700"
+                    >
+                      Verify & Send
+                    </Button>
                   </div>
                 </div>
               )}
