@@ -24,6 +24,8 @@ export function CreditCard3D({ card, className, gradient = 'from-indigo-500 via-
 
   const rotateX = useTransform(y, [-100, 100], [15, -15]);
   const rotateY = useTransform(x, [-100, 100], [-15, 15]);
+  const glareX = useTransform(x, [-100, 100], [-50, 50]);
+  const glareY = useTransform(y, [-100, 100], [-50, 50]);
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -75,10 +77,7 @@ export function CreditCard3D({ card, className, gradient = 'from-indigo-500 via-
         {isHovered && (
           <motion.div 
             className="absolute inset-0 bg-gradient-radial from-white/30 to-transparent opacity-40 z-10 pointer-events-none"
-            style={{
-              x: useTransform(x, [-100, 100], [-50, 50]),
-              y: useTransform(y, [-100, 100], [-50, 50]),
-            }}
+            style={{ x: glareX, y: glareY }}
           />
         )}
 
