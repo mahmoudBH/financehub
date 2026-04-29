@@ -1,32 +1,66 @@
 'use client';
 
+// ============================================
+// FinanceHub — Editorial Brutalist Luxury
+// Landing page. Obsidian + Matte Bone palette.
+// Electric Chartreuse (#DFFF00) accent.
+// Zero glassmorphism. Zero purple gradients.
+// ============================================
+
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/auth-store';
-import { Landmark } from 'lucide-react';
+
+import { NoiseOverlay } from '@/components/landing/NoiseOverlay';
+import { Navbar } from '@/components/landing/Navbar';
+import { Hero } from '@/components/landing/Hero';
+import { LedgerFeatures } from '@/components/landing/BentoFeatures';
+import { TechStack } from '@/components/landing/TechStack';
+import { GrandCTA, Footer } from '@/components/landing/CTA';
 
 export default function HomePage() {
   const { isAuthenticated, _hasHydrated } = useAuthStore();
   const router = useRouter();
+  const [showLanding, setShowLanding] = useState(false);
 
   useEffect(() => {
     if (!_hasHydrated) return;
     if (isAuthenticated) {
       router.push('/dashboard');
     } else {
-      router.push('/login');
+      setShowLanding(true);
     }
   }, [isAuthenticated, _hasHydrated, router]);
 
+  // Loading state — no spinner, just obsidian void
+  if (!showLanding) {
+    return (
+      <div className="min-h-screen bg-[#0A0A0A]" />
+    );
+  }
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 gradient-mesh">
-      <div className="flex items-center gap-3 mb-8 animate-fade-in">
-        <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center shadow-lg shadow-indigo-500/30">
-          <Landmark className="w-7 h-7 text-white" />
-        </div>
-        <h1 className="text-3xl font-bold text-white">FinanceHub</h1>
-      </div>
-      <div className="animate-spin w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full" />
-    </div>
+    <main className="min-h-screen bg-[#0A0A0A] text-[#E5E4DF] overflow-x-hidden selection:bg-[#DFFF00] selection:text-[#0A0A0A]">
+      {/* ── Film Grain Overlay — always on top ── */}
+      <NoiseOverlay />
+
+      {/* ── Architectural Navbar ── */}
+      <Navbar />
+
+      {/* ── The Terminal Hero ── */}
+      <Hero />
+
+      {/* ── The Ledger — Features ── */}
+      <LedgerFeatures />
+
+      {/* ── Tech Stack & Security Protocol ── */}
+      <TechStack />
+
+      {/* ── The Close — Grand CTA ── */}
+      <GrandCTA />
+
+      {/* ── Architectural Footer ── */}
+      <Footer />
+    </main>
   );
 }
