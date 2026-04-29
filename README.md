@@ -99,8 +99,12 @@ graph TD
 ```
 
 ## 📸 Screenshots
+Mode Light
+<img width="1920" height="1877" alt="screencapture-localhost-3000-dashboard-2026-04-29-15_52_44" src="https://github.com/user-attachments/assets/d996c181-f7ae-4e20-a3f7-cbb01017cb89" />
 
-![Dashboard Screenshot](./docs/dashboard-screenshot.png)
+Mode dark
+<img width="1920" height="1877" alt="screencapture-localhost-3000-dashboard-2026-04-29-15_53_18" src="https://github.com/user-attachments/assets/933510da-ba54-4236-b993-f3b7c827a865" />
+
 
 
 ## 🚀 Quick Start
