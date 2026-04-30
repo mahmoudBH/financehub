@@ -7,9 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { Landmark, Mail, Lock, User, Phone, ArrowRight, Eye, EyeOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Mail, Lock, User, Phone, Eye, EyeOff } from 'lucide-react';
 import { authApi } from '@/lib/api';
 import { useAuthStore } from '@/store/auth-store';
 
@@ -70,118 +68,236 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 gradient-mesh px-6 py-12">
-      <div className="w-full max-w-lg">
-        <div className="flex items-center gap-3 mb-10 justify-center">
-          <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center shadow-lg shadow-indigo-500/30">
-            <Landmark className="w-5 h-5 text-white" />
+    <div className="min-h-screen flex bg-white dark:bg-[#0A0A0A] text-black dark:text-[#E5E4DF] selection:bg-black selection:text-white dark:selection:bg-[#DFFF00] dark:selection:text-[#0A0A0A] transition-colors duration-300">
+      {/* ── Left - Brutalist Branding ── */}
+      <div className="hidden lg:flex lg:w-1/2 relative border-r border-black/[0.06] dark:border-[#E5E4DF]/[0.06] overflow-hidden">
+        {/* Architectural grid background */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-100" style={{
+          backgroundImage: `
+            linear-gradient(90deg, rgba(0,0,0,0.5) 1px, transparent 1px),
+            linear-gradient(0deg, rgba(0,0,0,0.5) 1px, transparent 1px)
+          `,
+          backgroundSize: '80px 80px',
+        }} />
+        
+        <div className="relative z-10 flex flex-col justify-center px-16 lg:px-24 w-full">
+          {/* Eyebrow */}
+          <div className="flex items-center gap-4 mb-12">
+            <div className="w-16 h-px bg-black dark:bg-[#DFFF00]" />
+            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-gray-500 dark:text-[#5A5A5A]">
+              Registration
+            </span>
           </div>
-          <span className="text-xl font-bold text-white">FinanceHub</span>
+
+          <h1 className="text-[clamp(3rem,6vw,6rem)] font-extrabold text-black dark:text-[#E5E4DF] leading-[0.9] tracking-[-0.04em] mb-8">
+            START<br />
+            <span className="text-gray-300 dark:text-[#3A3A3A]">BUILDING.</span>
+          </h1>
+          
+          <p className="text-[15px] leading-[1.8] text-gray-600 dark:text-[#7A7A7A] max-w-[400px]">
+            Initialize a new cryptographic identity. Provision your virtual cards and secure data vaults immediately.
+          </p>
+
+          {/* Protocol Details */}
+          <div className="mt-16 border-t border-black/[0.06] dark:border-[#E5E4DF]/[0.06] pt-8">
+            <div className="grid grid-cols-2 gap-8">
+              {[
+                { label: 'Provisioning', value: 'Instant' },
+                { label: 'Network', value: 'Global Settlement' },
+                { label: 'Infrastructure', value: 'High Availability' },
+                { label: 'Telemetry', value: 'Active' },
+              ].map((stat, i) => (
+                <div key={stat.label}>
+                  <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-gray-500 dark:text-[#5A5A5A] mb-2">
+                    {String(i + 1).padStart(2, '0')} // {stat.label}
+                  </div>
+                  <div className="font-mono text-[16px] text-black dark:text-[#E5E4DF]">
+                    {stat.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Right - Signup Form ── */}
+      <div className="flex-1 flex flex-col px-6 py-12 lg:px-24 justify-center relative">
+        {/* Top Navbar items */}
+        <div className="absolute top-0 left-0 right-0 h-14 flex items-center justify-between px-6 lg:px-24 border-b border-black/[0.06] dark:border-[#E5E4DF]/[0.06]">
+          <Link href="/" className="flex items-center gap-0">
+            <span className="text-[12px] font-bold tracking-[0.2em] uppercase text-black dark:text-[#E5E4DF]">
+              Finance
+            </span>
+            <span className="text-[12px] font-bold tracking-[0.2em] uppercase text-gray-500 dark:text-[#DFFF00]">
+              Hub
+            </span>
+            <span className="text-black dark:text-[#DFFF00] text-lg leading-none ml-0.5">.</span>
+          </Link>
+          <Link
+            href="/login"
+            className="font-mono text-[10px] tracking-[0.2em] uppercase text-gray-500 dark:text-[#7A7A7A] hover:text-black dark:hover:text-[#E5E4DF] transition-colors"
+          >
+            Authenticate ↗
+          </Link>
         </div>
 
-        <div className="p-8 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl">
-          <div className="mb-8 text-center">
-            <h2 className="text-2xl font-bold text-white mb-2">Create your account</h2>
-            <p className="text-slate-400">Start your digital banking experience</p>
+        <div className="w-full max-w-md mx-auto mt-14 overflow-y-auto max-h-screen pb-12 pt-8 scrollbar-hide">
+          <div className="mb-10">
+            <h2 className="text-[32px] font-bold tracking-[-0.03em] text-black dark:text-[#E5E4DF] mb-2">
+              Create Profile
+            </h2>
+            <p className="text-[14px] text-gray-600 dark:text-[#7A7A7A]">
+              Register your credentials to establish a new identity.
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1.5">First Name</label>
-                <Input
-                  {...register('firstName')}
-                  placeholder="John"
-                  icon={<User className="w-4 h-4" />}
-                  error={errors.firstName?.message}
-                  className="bg-slate-800 border-slate-700 text-white"
-                />
+                <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-gray-500 dark:text-[#5A5A5A] mb-2">
+                  First Name
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <User className="h-4 w-4 text-gray-400 dark:text-[#5A5A5A]" />
+                  </div>
+                  <input
+                    {...register('firstName')}
+                    placeholder="John"
+                    className="w-full bg-transparent border border-black/10 dark:border-[#E5E4DF]/20 text-black dark:text-[#E5E4DF] text-[14px] px-10 py-3.5 focus:outline-none focus:border-black dark:focus:border-[#DFFF00] transition-colors placeholder:text-gray-400 dark:placeholder:text-[#3A3A3A] rounded-none"
+                  />
+                </div>
+                {errors.firstName && (
+                  <p className="mt-2 text-red-500 dark:text-red-400 text-xs">{errors.firstName.message}</p>
+                )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1.5">Last Name</label>
-                <Input
-                  {...register('lastName')}
-                  placeholder="Doe"
-                  error={errors.lastName?.message}
-                  className="bg-slate-800 border-slate-700 text-white"
-                />
+                <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-gray-500 dark:text-[#5A5A5A] mb-2">
+                  Last Name
+                </label>
+                <div className="relative">
+                  <input
+                    {...register('lastName')}
+                    placeholder="Doe"
+                    className="w-full bg-transparent border border-black/10 dark:border-[#E5E4DF]/20 text-black dark:text-[#E5E4DF] text-[14px] px-4 py-3.5 focus:outline-none focus:border-black dark:focus:border-[#DFFF00] transition-colors placeholder:text-gray-400 dark:placeholder:text-[#3A3A3A] rounded-none"
+                  />
+                </div>
+                {errors.lastName && (
+                  <p className="mt-2 text-red-500 dark:text-red-400 text-xs">{errors.lastName.message}</p>
+                )}
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Email</label>
-              <Input
-                {...register('email')}
-                type="email"
-                placeholder="john@example.com"
-                icon={<Mail className="w-4 h-4" />}
-                error={errors.email?.message}
-                className="bg-slate-800 border-slate-700 text-white"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Phone (optional)</label>
-              <Input
-                {...register('phone')}
-                placeholder="+33 6 12 34 56 78"
-                icon={<Phone className="w-4 h-4" />}
-                className="bg-slate-800 border-slate-700 text-white"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
+              <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-gray-500 dark:text-[#5A5A5A] mb-2">
+                Email Address
+              </label>
               <div className="relative">
-                <Input
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-4 w-4 text-gray-400 dark:text-[#5A5A5A]" />
+                </div>
+                <input
+                  {...register('email')}
+                  type="email"
+                  placeholder="john@example.com"
+                  className="w-full bg-transparent border border-black/10 dark:border-[#E5E4DF]/20 text-black dark:text-[#E5E4DF] text-[14px] px-10 py-3.5 focus:outline-none focus:border-black dark:focus:border-[#DFFF00] transition-colors placeholder:text-gray-400 dark:placeholder:text-[#3A3A3A] rounded-none"
+                />
+              </div>
+              {errors.email && (
+                <p className="mt-2 text-red-500 dark:text-red-400 text-xs">{errors.email.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-gray-500 dark:text-[#5A5A5A] mb-2">
+                Phone Node (Optional)
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Phone className="h-4 w-4 text-gray-400 dark:text-[#5A5A5A]" />
+                </div>
+                <input
+                  {...register('phone')}
+                  placeholder="+33 6 12 34 56 78"
+                  className="w-full bg-transparent border border-black/10 dark:border-[#E5E4DF]/20 text-black dark:text-[#E5E4DF] text-[14px] px-10 py-3.5 focus:outline-none focus:border-black dark:focus:border-[#DFFF00] transition-colors placeholder:text-gray-400 dark:placeholder:text-[#3A3A3A] rounded-none"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-gray-500 dark:text-[#5A5A5A] mb-2">
+                Cryptographic Key
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-4 w-4 text-gray-400 dark:text-[#5A5A5A]" />
+                </div>
+                <input
                   {...register('password')}
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Create a strong password"
-                  icon={<Lock className="w-4 h-4" />}
-                  error={errors.password?.message}
-                  className="bg-slate-800 border-slate-700 text-white pr-10"
+                  className="w-full bg-transparent border border-black/10 dark:border-[#E5E4DF]/20 text-black dark:text-[#E5E4DF] text-[14px] px-10 py-3.5 focus:outline-none focus:border-black dark:focus:border-[#DFFF00] transition-colors placeholder:text-gray-400 dark:placeholder:text-[#3A3A3A] rounded-none"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-slate-500 hover:text-slate-300"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 dark:text-[#5A5A5A] hover:text-black dark:hover:text-[#E5E4DF] transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
+              {errors.password && (
+                <p className="mt-2 text-red-500 dark:text-red-400 text-xs">{errors.password.message}</p>
+              )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Confirm Password</label>
-              <Input
-                {...register('confirmPassword')}
-                type="password"
-                placeholder="Confirm your password"
-                icon={<Lock className="w-4 h-4" />}
-                error={errors.confirmPassword?.message}
-                className="bg-slate-800 border-slate-700 text-white"
-              />
+              <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-gray-500 dark:text-[#5A5A5A] mb-2">
+                Verify Key
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-4 w-4 text-gray-400 dark:text-[#5A5A5A]" />
+                </div>
+                <input
+                  {...register('confirmPassword')}
+                  type="password"
+                  placeholder="Confirm your password"
+                  className="w-full bg-transparent border border-black/10 dark:border-[#E5E4DF]/20 text-black dark:text-[#E5E4DF] text-[14px] px-10 py-3.5 focus:outline-none focus:border-black dark:focus:border-[#DFFF00] transition-colors placeholder:text-gray-400 dark:placeholder:text-[#3A3A3A] rounded-none"
+                />
+              </div>
+              {errors.confirmPassword && (
+                <p className="mt-2 text-red-500 dark:text-red-400 text-xs">{errors.confirmPassword.message}</p>
+              )}
             </div>
 
-            <div className="pt-2">
-              <Button type="submit" className="w-full h-12" loading={loading}>
-                Create Account
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full mt-4 bg-black dark:bg-[#DFFF00] text-white dark:text-[#0A0A0A] font-bold text-[12px] tracking-[0.15em] uppercase py-4 hover:bg-black/90 dark:hover:bg-[#DFFF00]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="animate-spin h-4 w-4 border-2 border-white dark:border-[#0A0A0A] border-t-transparent rounded-full" />
+                  Registering...
+                </span>
+              ) : (
+                <>
+                  Generate Identity
+                  <span className="relative flex h-1.5 w-1.5 ml-1">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white dark:bg-[#0A0A0A] opacity-40" />
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white dark:bg-[#0A0A0A]" />
+                  </span>
+                </>
+              )}
+            </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-slate-400">
-            Already have an account?{' '}
-            <Link href="/login" className="text-indigo-400 hover:text-indigo-300 font-medium">
-              Sign in
-            </Link>
+          <p className="mt-12 text-center text-[11px] text-gray-500 dark:text-[#5A5A5A]">
+            By generating an identity, you verify compliance with the Terminal protocol.
           </p>
         </div>
-
-        <p className="mt-6 text-center text-xs text-slate-600">
-          By creating an account, you agree to our Terms of Service and Privacy Policy.
-        </p>
       </div>
     </div>
   );

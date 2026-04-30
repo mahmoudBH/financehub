@@ -35,21 +35,21 @@ export default function InvestmentsPage() {
   const totalValue = activeData.reduce((acc, asset) => acc + (asset.price * asset.balance), 0);
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6 pb-12 animate-in">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Investments & Crypto</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Investments & Crypto</h1>
           <p className="text-muted-foreground mt-1">Manage your digital assets and portfolio.</p>
         </div>
-        <div className="flex bg-slate-800 p-1 rounded-lg">
+        <div className="flex bg-muted/50 p-1.5 rounded-2xl">
           <button 
-            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${activeTab === 'crypto' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-white'}`}
+            className={`px-6 py-2 rounded-xl text-sm font-bold transition-all ${activeTab === 'crypto' ? 'bg-indigo-500 text-white shadow-md' : 'text-muted-foreground hover:text-foreground hover:bg-background/50'}`}
             onClick={() => setActiveTab('crypto')}
           >
             Crypto
           </button>
           <button 
-            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${activeTab === 'stocks' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-white'}`}
+            className={`px-6 py-2 rounded-xl text-sm font-bold transition-all ${activeTab === 'stocks' ? 'bg-indigo-500 text-white shadow-md' : 'text-muted-foreground hover:text-foreground hover:bg-background/50'}`}
             onClick={() => setActiveTab('stocks')}
           >
             Stocks
@@ -58,40 +58,40 @@ export default function InvestmentsPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 relative overflow-hidden glassmorphism border-indigo-500/20 bg-indigo-500/5">
+        <Card className="lg:col-span-2 relative overflow-hidden bg-card border border-border/50 hover:shadow-lg transition-all duration-300 rounded-2xl">
           <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-3xl rounded-full" />
           <CardContent className="p-6 relative z-10">
             <div className="flex justify-between items-start mb-6">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Total Portfolio Value</p>
-                <h2 className="text-4xl font-bold text-white mt-1">${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
-                <div className="flex items-center gap-2 mt-2">
-                  <span className="flex items-center text-sm font-medium text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">
-                    <TrendingUp className="w-3 h-3 mr-1" /> +$4,250.00 (8.4%)
+                <h2 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight mt-2">${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
+                <div className="flex items-center gap-2 mt-4">
+                  <span className="flex items-center text-sm font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full">
+                    <TrendingUp className="w-4 h-4 mr-1.5" /> +$4,250.00 (8.4%)
                   </span>
-                  <span className="text-sm text-slate-400">Past month</span>
+                  <span className="text-sm text-muted-foreground ml-2">Past month</span>
                 </div>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 flex items-center justify-center">
-                <Activity className="w-6 h-6 text-indigo-400" />
+              <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center">
+                <Activity className="w-7 h-7 text-indigo-500" />
               </div>
             </div>
 
             <div className="h-64 mt-4">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={mockChartData}>
+                <AreaChart data={mockChartData} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
+                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.25}/>
                       <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" />
-                  <XAxis dataKey="date" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(val) => `$${val/1000}k`} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
+                  <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={11} tickLine={false} axisLine={false} />
+                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(val) => `$${val/1000}k`} />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px', color: '#fff' }}
-                    itemStyle={{ color: '#fff' }}
+                    contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '12px', color: 'hsl(var(--foreground))', boxShadow: '0 10px 40px rgba(0,0,0,0.1)' }}
+                    itemStyle={{ color: 'hsl(var(--foreground))', fontWeight: 'bold' }}
                   />
                   <Area type="monotone" dataKey="value" stroke="#6366f1" strokeWidth={3} fillOpacity={1} fill="url(#colorValue)" />
                 </AreaChart>
@@ -101,30 +101,30 @@ export default function InvestmentsPage() {
         </Card>
 
         <div className="space-y-6">
-          <Card className="glassmorphism bg-slate-900/50 border-slate-800">
+          <Card className="bg-card border border-border/50 hover:shadow-lg transition-all duration-300 rounded-2xl h-full">
             <CardContent className="p-6">
-              <h3 className="text-lg font-semibold mb-4 text-white">Your Assets</h3>
-              <div className="space-y-4">
+              <h3 className="text-lg font-bold mb-6 text-foreground">Your Assets</h3>
+              <div className="space-y-3">
                 {activeData.map((asset, index) => (
                   <motion.div 
                     key={asset.symbol}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-800 transition-colors cursor-pointer group"
+                    className="flex items-center justify-between p-4 rounded-xl border border-border/40 hover:bg-muted/50 transition-colors cursor-pointer group"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: `${asset.color}20` }}>
-                        {activeTab === 'crypto' ? <Bitcoin className="w-5 h-5" style={{ color: asset.color }} /> : <PieChart className="w-5 h-5" style={{ color: asset.color }} />}
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: `${asset.color}15` }}>
+                        {activeTab === 'crypto' ? <Bitcoin className="w-6 h-6" style={{ color: asset.color }} /> : <PieChart className="w-6 h-6" style={{ color: asset.color }} />}
                       </div>
                       <div>
-                        <p className="font-semibold text-white">{asset.name}</p>
-                        <p className="text-xs text-slate-400">{asset.balance} {asset.symbol}</p>
+                        <p className="font-bold text-foreground text-[15px]">{asset.name}</p>
+                        <p className="text-xs text-muted-foreground font-mono mt-0.5">{asset.balance} {asset.symbol}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-white">${(asset.price * asset.balance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                      <p className={`text-xs flex items-center justify-end gap-1 ${asset.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                      <p className="font-bold text-foreground text-[15px]">${(asset.price * asset.balance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                      <p className={`text-xs flex items-center justify-end gap-1 mt-1 font-bold ${asset.change >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
                         {asset.change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                         {Math.abs(asset.change)}%
                       </p>

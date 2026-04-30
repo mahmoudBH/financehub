@@ -109,7 +109,7 @@ export default function VaultsPage() {
         <svg className="w-full h-full transform -rotate-90" viewBox="0 0 80 80">
           <circle
             cx="40" cy="40" r={radius}
-            className="text-slate-800"
+            className="text-slate-200 dark:text-slate-800"
             strokeWidth="6" stroke="currentColor" fill="transparent"
           />
           <motion.circle
@@ -124,20 +124,20 @@ export default function VaultsPage() {
           />
         </svg>
         <div className="absolute flex flex-col items-center justify-center">
-          <span className="text-sm font-bold text-white">{Math.round(percentage)}%</span>
+          <span className="text-sm font-bold text-foreground">{Math.round(percentage)}%</span>
         </div>
       </div>
     );
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-12 animate-in">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Smart Savings Vaults</h1>
-          <p className="text-slate-400">Automate your savings with AI and Round-ups.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Smart Savings Vaults</h1>
+          <p className="text-muted-foreground mt-1">Automate your savings with AI and Round-ups.</p>
         </div>
-        <Button onClick={() => setIsCreateModalOpen(true)} className="bg-indigo-600 hover:bg-indigo-700">
+        <Button onClick={() => setIsCreateModalOpen(true)} className="bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl h-11 px-6 shadow-sm">
           <Plus className="w-4 h-4 mr-2" />
           Create Vault
         </Button>
@@ -146,7 +146,7 @@ export default function VaultsPage() {
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-64 rounded-2xl bg-slate-800/50 animate-pulse border border-slate-700/50" />
+            <div key={i} className="h-64 rounded-2xl bg-muted/30 animate-pulse border border-border/40" />
           ))}
         </div>
       ) : (
@@ -156,21 +156,21 @@ export default function VaultsPage() {
               key={vault.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="relative p-6 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl overflow-hidden group hover:border-indigo-500/30 transition-colors"
+              className="relative p-6 rounded-2xl bg-card border border-border/50 hover:border-indigo-500/30 hover:shadow-lg transition-all duration-300 overflow-hidden group"
             >
               <div className="absolute top-0 right-0 p-4">
-                <button className="text-slate-500 hover:text-white transition-colors">
+                <button className="text-muted-foreground hover:text-foreground transition-colors">
                   <MoreVertical className="w-5 h-5" />
                 </button>
               </div>
 
               <div className="flex items-center gap-4 mb-6">
-                <div className={`w-12 h-12 rounded-xl bg-${vault.color}-500/20 flex items-center justify-center`}>
-                  <Target className={`w-6 h-6 text-${vault.color}-400`} />
+                <div className={`w-14 h-14 rounded-2xl bg-${vault.color}-500/15 flex items-center justify-center shadow-inner`}>
+                  <Target className={`w-7 h-7 text-${vault.color}-500`} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-white">{vault.name}</h3>
-                  <p className="text-sm text-slate-400">{vault.account?.currency} {Number(vault.targetAmount).toLocaleString()}</p>
+                  <h3 className="text-xl font-bold text-foreground">{vault.name}</h3>
+                  <p className="text-sm font-mono text-muted-foreground mt-0.5">{vault.account?.currency} {Number(vault.targetAmount).toLocaleString()}</p>
                 </div>
               </div>
 
@@ -182,22 +182,22 @@ export default function VaultsPage() {
                 />
               </div>
 
-              <div className="flex items-center justify-between mb-6 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+              <div className="flex items-center justify-between mb-6 p-4 rounded-xl bg-muted/40 border border-border/40">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center">
-                    <TrendingUp className="w-4 h-4 text-indigo-400" />
+                  <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+                    <TrendingUp className="w-5 h-5 text-indigo-500" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">Round-ups</p>
-                    <p className="text-xs text-slate-400">Save spare change</p>
+                    <p className="text-[15px] font-bold text-foreground">Round-ups</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">Save spare change</p>
                   </div>
                 </div>
                 <button
                   onClick={() => toggleRoundUp(vault)}
-                  className={`w-12 h-6 rounded-full transition-colors relative ${vault.isRoundUpEnabled ? 'bg-indigo-500' : 'bg-slate-700'}`}
+                  className={`w-12 h-6 rounded-full transition-colors relative shadow-inner ${vault.isRoundUpEnabled ? 'bg-indigo-500' : 'bg-muted-foreground/30'}`}
                 >
                   <motion.div
-                    className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full"
+                    className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-sm"
                     animate={{ x: vault.isRoundUpEnabled ? 24 : 0 }}
                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
                   />
@@ -206,7 +206,7 @@ export default function VaultsPage() {
 
               <Button 
                 onClick={() => openAddFundsModal(vault.id)}
-                className="w-full bg-slate-800 hover:bg-slate-700 text-white"
+                className="w-full bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-none shadow-none rounded-xl h-12"
               >
                 <Coins className="w-4 h-4 mr-2" />
                 Add Funds
@@ -231,22 +231,22 @@ export default function VaultsPage() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-md p-6 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl z-10"
+              className="relative w-full max-w-md p-6 bg-card border border-border/60 rounded-3xl shadow-2xl z-10"
             >
-              <h2 className="text-xl font-bold text-white mb-6">Create New Vault</h2>
+              <h2 className="text-xl font-bold text-foreground mb-6">Create New Vault</h2>
               <form onSubmit={handleCreateVault} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Vault Name</label>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Vault Name</label>
                   <Input
                     required
                     value={newVault.name}
                     onChange={(e) => setNewVault({ ...newVault, name: e.target.value })}
                     placeholder="e.g. Dream Vacation"
-                    className="bg-slate-800 border-slate-700 text-white"
+                    className="bg-background border-input text-foreground rounded-xl h-12"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Target Amount</label>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Target Amount</label>
                   <Input
                     required
                     type="number"
@@ -254,16 +254,16 @@ export default function VaultsPage() {
                     value={newVault.targetAmount}
                     onChange={(e) => setNewVault({ ...newVault, targetAmount: e.target.value })}
                     placeholder="5000"
-                    className="bg-slate-800 border-slate-700 text-white"
+                    className="bg-background border-input text-foreground rounded-xl h-12"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Source Account</label>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Source Account</label>
                   <select
                     required
                     value={newVault.accountId}
                     onChange={(e) => setNewVault({ ...newVault, accountId: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 text-white rounded-md h-10 px-3"
+                    className="w-full bg-background border border-input text-foreground rounded-xl h-12 px-4 focus:ring-2 focus:ring-primary/20"
                   >
                     <option value="" disabled>Select an account</option>
                     {accounts.map(acc => (
@@ -274,16 +274,16 @@ export default function VaultsPage() {
                   </select>
                 </div>
 
-                <div className="flex gap-3 pt-4 mt-6 border-t border-slate-800">
+                <div className="flex gap-3 pt-6 mt-6 border-t border-border/50">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => setIsCreateModalOpen(false)}
-                    className="flex-1 bg-transparent border-slate-700 text-slate-300 hover:bg-slate-800"
+                    className="flex-1 rounded-xl h-12"
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="flex-1 bg-indigo-600 hover:bg-indigo-700">
+                  <Button type="submit" className="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl h-12">
                     Create Vault
                   </Button>
                 </div>
@@ -308,12 +308,12 @@ export default function VaultsPage() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-sm p-6 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl z-10"
+              className="relative w-full max-w-sm p-6 bg-card border border-border/60 rounded-3xl shadow-2xl z-10"
             >
-              <h2 className="text-xl font-bold text-white mb-6">Add Funds to Vault</h2>
+              <h2 className="text-xl font-bold text-foreground mb-6">Add Funds to Vault</h2>
               <form onSubmit={handleAddFunds} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Amount to Add</label>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Amount to Add</label>
                   <Input
                     required
                     type="number"
@@ -322,20 +322,20 @@ export default function VaultsPage() {
                     value={fundAmount}
                     onChange={(e) => setFundAmount(e.target.value)}
                     placeholder="e.g. 50"
-                    className="bg-slate-800 border-slate-700 text-white text-lg h-12"
+                    className="bg-background border-input text-foreground text-lg h-14 rounded-xl"
                   />
                 </div>
 
-                <div className="flex gap-3 pt-4 mt-6 border-t border-slate-800">
+                <div className="flex gap-3 pt-6 mt-6 border-t border-border/50">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => setIsAddFundsModalOpen(false)}
-                    className="flex-1 bg-transparent border-slate-700 text-slate-300 hover:bg-slate-800"
+                    className="flex-1 rounded-xl h-12"
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="flex-1 bg-emerald-600 hover:bg-emerald-700">
+                  <Button type="submit" className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl h-12">
                     Confirm Deposit
                   </Button>
                 </div>

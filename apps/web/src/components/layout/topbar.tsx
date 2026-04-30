@@ -1,14 +1,12 @@
 'use client';
 
-import { Bell, Search, Moon, Sun, Menu, Command } from 'lucide-react';
+import { Bell, Search, Menu, Command, Sun, Moon } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/auth-store';
 import { useUIStore } from '@/store/ui-store';
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-
-const spring = { type: 'spring' as const, stiffness: 300, damping: 30 };
 
 export function Topbar() {
   const { user } = useAuthStore();
@@ -29,43 +27,41 @@ export function Topbar() {
     <header
       className={cn(
         'sticky top-0 z-30 flex items-center justify-between h-16 px-4 md:px-6',
-        // Glassmorphism
-        'bg-white/60 dark:bg-[#0a0a0a]/60',
-        'backdrop-blur-2xl',
-        'border-b border-black/[0.04] dark:border-white/[0.04]',
+        'bg-white dark:bg-[#0A0A0A]',
+        'border-b border-black/[0.06] dark:border-[#E5E4DF]/[0.06]',
+        'transition-colors duration-300'
       )}
     >
       {/* Left */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4">
         {/* Mobile hamburger */}
-        <motion.button
-          className="lg:hidden p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-foreground/[0.04] dark:hover:bg-white/[0.04] transition-colors"
+        <button
+          className="lg:hidden text-gray-500 dark:text-[#5A5A5A] hover:text-black dark:hover:text-[#E5E4DF] transition-colors"
           onClick={() => setMobileSidebarOpen(true)}
-          whileTap={{ scale: 0.9 }}
           aria-label="Open menu"
         >
           <Menu className="w-5 h-5" />
-        </motion.button>
+        </button>
 
         {/* Search bar */}
         <div className="hidden md:flex items-center">
           <div className="relative group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60 group-focus-within:text-primary transition-colors" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-[#5A5A5A] group-focus-within:text-black dark:group-focus-within:text-[#DFFF00] transition-colors" />
             <input
               type="text"
-              placeholder="Search anything..."
+              placeholder="Search terminal..."
               className={cn(
-                'h-10 w-72 lg:w-80 rounded-xl pl-9 pr-16 text-sm',
-                'bg-foreground/[0.03] dark:bg-white/[0.04]',
-                'border border-black/[0.06] dark:border-white/[0.06]',
-                'text-foreground placeholder:text-muted-foreground/50',
-                'focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30',
-                'transition-all duration-200',
+                'h-10 w-72 lg:w-96 rounded-none pl-12 pr-16 text-[13px]',
+                'bg-transparent',
+                'border border-black/10 dark:border-[#E5E4DF]/20',
+                'text-black dark:text-[#E5E4DF] placeholder:text-gray-400 dark:placeholder:text-[#5A5A5A]',
+                'focus:outline-none focus:border-black dark:focus:border-[#DFFF00]',
+                'transition-all duration-200 font-mono',
               )}
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
-              <kbd className="flex items-center gap-0.5 text-[10px] text-muted-foreground/50 bg-foreground/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] rounded-md px-1.5 py-0.5 font-mono">
-                <Command className="w-2.5 h-2.5" />K
+              <kbd className="flex items-center gap-1 text-[10px] text-gray-400 dark:text-[#5A5A5A] font-mono uppercase tracking-[0.1em]">
+                <Command className="w-3 h-3" />K
               </kbd>
             </div>
           </div>
@@ -73,68 +69,55 @@ export function Topbar() {
       </div>
 
       {/* Right */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-6">
         {/* Theme toggle */}
-        <motion.button
+        <button
           onClick={toggleTheme}
-          className={cn(
-            'relative p-2.5 rounded-xl',
-            'text-muted-foreground hover:text-foreground',
-            'hover:bg-foreground/[0.04] dark:hover:bg-white/[0.04]',
-            'transition-colors duration-200',
-          )}
-          whileTap={{ scale: 0.9, rotate: 15 }}
-          transition={spring}
+          className="text-gray-500 dark:text-[#5A5A5A] hover:text-black dark:hover:text-[#E5E4DF] transition-colors duration-200"
           aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         >
-          <motion.div
-            key={isDark ? 'sun' : 'moon'}
-            initial={{ scale: 0, rotate: -90, opacity: 0 }}
-            animate={{ scale: 1, rotate: 0, opacity: 1 }}
-            exit={{ scale: 0, rotate: 90, opacity: 0 }}
-            transition={spring}
-          >
-            {isDark ? <Sun className="w-[18px] h-[18px]" /> : <Moon className="w-[18px] h-[18px]" />}
-          </motion.div>
-        </motion.button>
+          {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+        </button>
+
+        {/* Live Indicator */}
+        <div className="hidden md:flex items-center gap-2">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-black dark:bg-[#DFFF00] opacity-40" />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-black dark:bg-[#DFFF00]" />
+          </span>
+          <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-black dark:text-[#DFFF00]">
+            System Online
+          </span>
+        </div>
 
         {/* Notifications */}
         <Link
           href="/dashboard/notifications"
-          className={cn(
-            'relative p-2.5 rounded-xl',
-            'text-muted-foreground hover:text-foreground',
-            'hover:bg-foreground/[0.04] dark:hover:bg-white/[0.04]',
-            'transition-colors duration-200',
-          )}
+          className="relative text-gray-500 dark:text-[#5A5A5A] hover:text-black dark:hover:text-[#E5E4DF] transition-colors duration-200"
           aria-label="View notifications"
         >
-          <Bell className="w-[18px] h-[18px]" />
-          <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-[#0a0a0a]" />
+          <Bell className="w-5 h-5" />
+          <span className="absolute -top-1 -right-1 w-2 h-2 bg-black dark:bg-[#DFFF00]" />
         </Link>
 
         {/* Divider */}
-        <div className="w-px h-7 bg-border/60 mx-1.5 hidden md:block" />
+        <div className="w-px h-6 bg-black/[0.06] dark:bg-[#E5E4DF]/[0.06] hidden md:block" />
 
         {/* User */}
         <Link
           href="/dashboard/profile"
-          className={cn(
-            'flex items-center gap-2.5 px-2 py-1.5 rounded-xl',
-            'hover:bg-foreground/[0.04] dark:hover:bg-white/[0.04]',
-            'transition-colors duration-200',
-          )}
+          className="flex items-center gap-3 group"
         >
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-indigo-400 flex items-center justify-center text-[11px] font-bold text-white ring-2 ring-white/80 dark:ring-white/10 shadow-sm">
-            {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
+          <div className="hidden md:block text-right">
+            <p className="text-[13px] font-bold tracking-wide uppercase text-black dark:text-[#E5E4DF] leading-none group-hover:text-gray-600 dark:group-hover:text-[#DFFF00] transition-colors">
+              {user?.firstName}
+            </p>
+            <p className="text-[10px] font-mono tracking-[0.1em] text-gray-400 dark:text-[#5A5A5A] mt-1">
+              {user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN' ? 'ROOT' : 'USER'}
+            </p>
           </div>
-          <div className="hidden md:block">
-            <p className="text-sm font-medium leading-none text-foreground">
-              {user?.firstName} {user?.lastName}
-            </p>
-            <p className="text-[11px] text-muted-foreground mt-0.5">
-              {user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN' ? 'Administrator' : 'Personal'}
-            </p>
+          <div className="w-9 h-9 bg-black dark:bg-[#E5E4DF] text-white dark:text-[#0A0A0A] flex items-center justify-center font-mono text-[13px] font-bold">
+            {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
           </div>
         </Link>
       </div>

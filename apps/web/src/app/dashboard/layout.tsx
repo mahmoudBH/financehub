@@ -29,32 +29,45 @@ export default function DashboardLayout({
 
   if (!_hasHydrated || !isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0A0A0A]">
         <motion.div
-          className="flex flex-col items-center gap-4"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+          className="flex flex-col items-center gap-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
         >
-          <motion.div
-            className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-indigo-400 flex items-center justify-center shadow-xl shadow-primary/20"
-            animate={{ scale: [1, 1.05, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            <Landmark className="w-6 h-6 text-white" />
-          </motion.div>
-          <p className="text-sm text-muted-foreground font-medium">Loading your dashboard...</p>
+          <div className="flex items-center gap-2">
+            <span className="text-[12px] font-bold tracking-[0.2em] uppercase text-black dark:text-[#E5E4DF]">
+              Finance
+            </span>
+            <span className="text-[12px] font-bold tracking-[0.2em] uppercase text-gray-500 dark:text-[#DFFF00]">
+              Hub
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="flex h-1.5 w-1.5 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full bg-black dark:bg-[#DFFF00] opacity-40" />
+              <span className="relative inline-flex h-1.5 w-1.5 bg-black dark:bg-[#DFFF00]" />
+            </span>
+            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-gray-400 dark:text-[#5A5A5A]">
+              Initializing Dashboard...
+            </span>
+          </div>
         </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background relative selection:bg-indigo-500/30 overflow-x-hidden">
-      {/* Ambient Luxury Background */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500/10 dark:bg-indigo-500/5 blur-[120px] rounded-full animate-float" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-500/10 dark:bg-purple-500/5 blur-[150px] rounded-full animate-float" style={{ animationDelay: '2s' }} />
+    <div className="min-h-screen bg-white dark:bg-[#0A0A0A] text-black dark:text-[#E5E4DF] relative selection:bg-black selection:text-white dark:selection:bg-[#DFFF00] dark:selection:text-[#0A0A0A] overflow-x-hidden transition-colors duration-300">
+      {/* ── Brutalist Background Noise / Grain ── */}
+      <div className="pointer-events-none fixed inset-0 z-0 h-full w-full opacity-[0.03] dark:opacity-[0.03] mix-blend-multiply dark:mix-blend-normal">
+        <svg id="noise" width="100%" height="100%">
+          <filter id="noiseFilter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
+          </filter>
+          <rect width="100%" height="100%" filter="url(#noiseFilter)" />
+        </svg>
       </div>
 
       {/* Sidebar */}

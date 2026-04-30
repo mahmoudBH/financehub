@@ -38,14 +38,14 @@ export default function TransfersPage() {
   };
 
   return (
-    <div className="space-y-6 animate-in">
-      <div><h1 className="text-2xl font-bold">Transfers</h1><p className="text-muted-foreground mt-1">Send money between accounts</p></div>
+    <div className="space-y-6 animate-in pb-12">
+      <div><h1 className="text-2xl md:text-3xl font-bold text-foreground">Transfers</h1><p className="text-muted-foreground mt-1">Send money between accounts instantly</p></div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Transfer Form */}
         <div className="lg:col-span-2">
-          <Card>
-            <CardHeader><CardTitle className="flex items-center gap-2"><ArrowLeftRight className="w-5 h-5" /> New Transfer</CardTitle></CardHeader>
+          <Card className="bg-card border border-border/50 hover:shadow-lg transition-all duration-300 rounded-2xl">
+            <CardHeader><CardTitle className="flex items-center gap-2 text-indigo-500"><ArrowLeftRight className="w-5 h-5" /> New Transfer</CardTitle></CardHeader>
             <CardContent>
               {step === 'form' && (
                 <div className="space-y-4">
@@ -69,24 +69,24 @@ export default function TransfersPage() {
                     {form.amount && <p className="text-xs text-muted-foreground mt-1">Fee: {formatCurrency(fee)} • Total: {formatCurrency(Number(form.amount) + fee)}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1.5">Description (optional)</label>
-                    <Input placeholder="Payment reference..." value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} />
+                    <label className="block text-sm font-medium mb-1.5 text-foreground">Description (optional)</label>
+                    <Input placeholder="Payment reference..." value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="h-11 rounded-lg" />
                   </div>
-                  <Button onClick={handleSubmit} className="w-full h-12" disabled={!form.sourceAccountId || !form.amount}><Send className="w-4 h-4 mr-2" /> Review Transfer</Button>
+                  <Button onClick={handleSubmit} className="w-full h-12 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white" disabled={!form.sourceAccountId || !form.amount}><Send className="w-4 h-4 mr-2" /> Review Transfer</Button>
                 </div>
               )}
               {step === 'confirm' && (
                 <div className="space-y-4">
-                  <div className="p-4 rounded-xl bg-muted/50 space-y-3">
-                    <div className="flex justify-between"><span className="text-sm text-muted-foreground">From</span><span className="text-sm font-medium">{sourceAcc?.name}</span></div>
-                    <div className="flex justify-between"><span className="text-sm text-muted-foreground">Amount</span><span className="text-sm font-medium">{formatCurrency(Number(form.amount))}</span></div>
-                    <div className="flex justify-between"><span className="text-sm text-muted-foreground">Fee (0.1%)</span><span className="text-sm font-medium">{formatCurrency(fee)}</span></div>
-                    <div className="border-t border-border pt-2 flex justify-between"><span className="text-sm font-semibold">Total</span><span className="text-sm font-bold">{formatCurrency(Number(form.amount) + fee)}</span></div>
-                    {form.description && <div className="flex justify-between"><span className="text-sm text-muted-foreground">Note</span><span className="text-sm">{form.description}</span></div>}
+                  <div className="p-4 rounded-xl bg-indigo-500/5 border border-indigo-500/10 space-y-3">
+                    <div className="flex justify-between"><span className="text-sm text-muted-foreground">From</span><span className="text-sm font-medium text-foreground">{sourceAcc?.name}</span></div>
+                    <div className="flex justify-between"><span className="text-sm text-muted-foreground">Amount</span><span className="text-sm font-medium text-foreground">{formatCurrency(Number(form.amount))}</span></div>
+                    <div className="flex justify-between"><span className="text-sm text-muted-foreground">Fee (0.1%)</span><span className="text-sm font-medium text-foreground">{formatCurrency(fee)}</span></div>
+                    <div className="border-t border-border pt-2 flex justify-between"><span className="text-sm font-semibold text-foreground">Total</span><span className="text-sm font-bold text-indigo-500">{formatCurrency(Number(form.amount) + fee)}</span></div>
+                    {form.description && <div className="flex justify-between"><span className="text-sm text-muted-foreground">Note</span><span className="text-sm text-foreground">{form.description}</span></div>}
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => setStep('form')} className="flex-1">Back</Button>
-                    <Button onClick={() => setStep('otp')} className="flex-1 bg-indigo-600 hover:bg-indigo-700">Continue</Button>
+                    <Button variant="outline" onClick={() => setStep('form')} className="flex-1 rounded-xl">Back</Button>
+                    <Button onClick={() => setStep('otp')} className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl">Continue</Button>
                   </div>
                 </div>
               )}
@@ -104,13 +104,13 @@ export default function TransfersPage() {
                       type="text" 
                       placeholder="123456" 
                       maxLength={6}
-                      className="text-center text-2xl tracking-widest font-mono h-14"
+                      className="text-center text-2xl tracking-widest font-mono h-14 bg-background border-border rounded-xl"
                       value={otp}
                       onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                     />
                   </div>
                   <div className="flex gap-2 pt-4">
-                    <Button variant="outline" onClick={() => setStep('confirm')} className="flex-1">Cancel</Button>
+                    <Button variant="outline" onClick={() => setStep('confirm')} className="flex-1 rounded-xl">Cancel</Button>
                     <Button 
                       onClick={() => transferM.mutate({ 
                         sourceAccountId: form.sourceAccountId, 
@@ -120,7 +120,7 @@ export default function TransfersPage() {
                       })} 
                       loading={transferM.isPending} 
                       disabled={otp.length !== 6}
-                      className="flex-1 bg-emerald-600 hover:bg-emerald-700"
+                      className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl"
                     >
                       Verify & Send
                     </Button>
@@ -149,20 +149,20 @@ export default function TransfersPage() {
         </div>
 
         {/* Transfer History */}
-        <Card>
-          <CardHeader><CardTitle className="text-base">Recent Transfers</CardTitle></CardHeader>
+        <Card className="bg-card border border-border/50 rounded-2xl hover:shadow-lg transition-all duration-300">
+          <CardHeader><CardTitle className="text-base text-foreground">Recent Transfers</CardTitle></CardHeader>
           <CardContent>
             <div className="space-y-3">
               {(transfers?.data || []).slice(0, 8).map((t: any) => (
-                <div key={t.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                  <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center"><ArrowLeftRight className="w-4 h-4 text-indigo-500" /></div>
+                <div key={t.id} className="flex items-center gap-3 p-3 rounded-xl border border-border/40 hover:bg-muted/50 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center flex-shrink-0"><ArrowLeftRight className="w-4 h-4 text-indigo-500" /></div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{t.description || t.reference}</p>
+                    <p className="text-sm font-medium truncate text-foreground">{t.description || t.reference}</p>
                     <p className="text-xs text-muted-foreground">{formatDateTime(t.createdAt)}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-semibold">{formatCurrency(Number(t.amount))}</p>
-                    <Badge variant={t.status === 'COMPLETED' ? 'success' : t.status === 'FAILED' ? 'destructive' : 'warning'} className="text-[10px]">{t.status}</Badge>
+                    <p className="text-sm font-semibold text-foreground">{formatCurrency(Number(t.amount))}</p>
+                    <Badge variant={t.status === 'COMPLETED' ? 'success' : t.status === 'FAILED' ? 'destructive' : 'warning'} className="text-[10px] mt-1">{t.status}</Badge>
                   </div>
                 </div>
               ))}

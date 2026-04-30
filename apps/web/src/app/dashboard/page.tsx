@@ -95,18 +95,18 @@ export default function DashboardPage() {
   if (isLoading) return <DashboardSkeleton />;
 
   return (
-    <motion.div className="space-y-6" variants={stagger} initial="hidden" animate="show">
+    <motion.div className="space-y-6 pb-12" variants={stagger} initial="hidden" animate="show">
       {/* Header */}
       <motion.div variants={fadeUp} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
             Good {greeting}, {user?.firstName} 👋
           </h1>
           <p className="text-muted-foreground mt-1">Here&apos;s your financial overview</p>
         </div>
         <div className="flex items-center gap-2">
           <Link href="/dashboard/transfers">
-            <Button size="sm" className="btn-press gap-2">
+            <Button size="sm" className="btn-press gap-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl">
               <ArrowUpRight className="w-4 h-4" /> Send Money
             </Button>
           </Link>
@@ -116,7 +116,7 @@ export default function DashboardPage() {
       {/* Stat Cards */}
       <motion.div variants={fadeUp} className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {/* Total Balance */}
-        <Card className="col-span-2 lg:col-span-1 relative overflow-hidden glass-card hover:-translate-y-1 transition-all duration-300">
+        <Card className="col-span-2 lg:col-span-1 relative overflow-hidden bg-card border border-border/50 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-indigo-500/20 to-transparent rounded-bl-full" />
           <CardContent className="p-5 md:p-6 relative z-10">
             <div className="flex items-center justify-between mb-3">
@@ -125,7 +125,7 @@ export default function DashboardPage() {
                 <Wallet className="w-4 h-4 text-indigo-500" />
               </div>
             </div>
-            <AnimatedNumber value={totalBalance} className="text-2xl md:text-3xl font-bold" />
+            <AnimatedNumber value={totalBalance} className="text-2xl md:text-3xl font-bold text-foreground" />
             <div className="flex items-center gap-1 mt-2">
               <TrendingUp className="w-3 h-3 text-emerald-500" />
               <span className="text-xs text-emerald-500 font-medium">+12.5%</span>
@@ -135,7 +135,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* Income */}
-        <Card className="relative overflow-hidden glass-card hover:-translate-y-1 transition-all duration-300">
+        <Card className="relative overflow-hidden bg-card border border-border/50 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl">
           <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-500/20 to-transparent rounded-bl-full" />
           <CardContent className="p-5 md:p-6 relative z-10">
             <div className="flex items-center justify-between mb-3">
@@ -150,7 +150,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* Expenses */}
-        <Card className="relative overflow-hidden glass-card hover:-translate-y-1 transition-all duration-300">
+        <Card className="relative overflow-hidden bg-card border border-border/50 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl">
           <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-red-500/20 to-transparent rounded-bl-full" />
           <CardContent className="p-5 md:p-6 relative z-10">
             <div className="flex items-center justify-between mb-3">
@@ -165,7 +165,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* Active Cards */}
-        <Card className="relative overflow-hidden glass-card hover:-translate-y-1 transition-all duration-300">
+        <Card className="relative overflow-hidden bg-card border border-border/50 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl">
           <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-purple-500/20 to-transparent rounded-bl-full" />
           <CardContent className="p-5 md:p-6 relative z-10">
             <div className="flex items-center justify-between mb-3">
@@ -174,7 +174,7 @@ export default function DashboardPage() {
                 <CreditCard className="w-4 h-4 text-purple-500" />
               </div>
             </div>
-            <p className="text-xl md:text-2xl font-bold">2</p>
+            <p className="text-xl md:text-2xl font-bold text-foreground">2</p>
             <p className="text-xs text-muted-foreground mt-2">{accounts.length || 3} accounts</p>
           </CardContent>
         </Card>
@@ -186,12 +186,12 @@ export default function DashboardPage() {
         <div className="grid grid-cols-4 gap-2 md:gap-3">
           {quickActions.map((action) => (
             <Link key={action.label} href={action.href}>
-              <Card className="group cursor-pointer glass-card border-transparent hover:border-primary/30 transition-all duration-300">
+              <Card className="group cursor-pointer bg-card border border-border/50 hover:border-primary/30 transition-all duration-300 rounded-2xl">
                 <CardContent className="p-3 md:p-4 flex flex-col items-center text-center gap-2">
-                  <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-lg shadow-indigo-500/20`}>
+                  <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-lg opacity-90 group-hover:opacity-100`}>
                     <action.icon className="w-4 h-4 md:w-5 md:h-5 text-white" />
                   </div>
-                  <span className="text-[11px] md:text-xs font-medium">{action.label}</span>
+                  <span className="text-[11px] md:text-xs font-medium text-foreground">{action.label}</span>
                 </CardContent>
               </Card>
             </Link>
@@ -202,10 +202,10 @@ export default function DashboardPage() {
       {/* Charts Row */}
       <motion.div variants={fadeUp} className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
         {/* Revenue Chart */}
-        <Card className="lg:col-span-2 glass-card">
+        <Card className="lg:col-span-2 bg-card border border-border/50 rounded-2xl">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-base md:text-lg">Revenue & Expenses</CardTitle>
+              <CardTitle className="text-base md:text-lg text-foreground">Revenue & Expenses</CardTitle>
               <div className="flex items-center gap-4 text-xs">
                 <div className="flex items-center gap-1.5">
                   <div className="w-2 h-2 rounded-full bg-indigo-500" />
@@ -240,13 +240,15 @@ export default function DashboardPage() {
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
                       borderRadius: '12px',
-                      boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
+                      boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
                       fontSize: '12px',
+                      color: 'hsl(var(--foreground))'
                     }}
-                    labelStyle={{ color: 'hsl(var(--foreground))' }}
+                    labelStyle={{ color: 'hsl(var(--foreground))', fontWeight: 'bold' }}
+                    itemStyle={{ color: 'hsl(var(--foreground))' }}
                   />
-                  <Area type="monotone" dataKey="income" stroke="#6366f1" strokeWidth={2} fill="url(#incomeGrad)" />
-                  <Area type="monotone" dataKey="expenses" stroke="#f87171" strokeWidth={2} fill="url(#expenseGrad)" />
+                  <Area type="monotone" dataKey="income" stroke="#6366f1" strokeWidth={3} fill="url(#incomeGrad)" />
+                  <Area type="monotone" dataKey="expenses" stroke="#f87171" strokeWidth={3} fill="url(#expenseGrad)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -254,9 +256,9 @@ export default function DashboardPage() {
         </Card>
 
         {/* Spending Breakdown */}
-        <Card className="glass-card">
+        <Card className="bg-card border border-border/50 rounded-2xl">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base md:text-lg">Spending Breakdown</CardTitle>
+            <CardTitle className="text-base md:text-lg text-foreground">Spending Breakdown</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-44 md:h-48">
@@ -266,14 +268,14 @@ export default function DashboardPage() {
                     data={spendingData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={50}
-                    outerRadius={75}
-                    paddingAngle={3}
+                    innerRadius={55}
+                    outerRadius={80}
+                    paddingAngle={4}
                     dataKey="value"
                     strokeWidth={0}
                   >
                     {spendingData.map((entry, i) => (
-                      <Cell key={i} fill={entry.color} />
+                      <Cell key={i} fill={entry.color} className="hover:opacity-80 transition-opacity" />
                     ))}
                   </Pie>
                   <Tooltip
@@ -283,19 +285,21 @@ export default function DashboardPage() {
                       border: '1px solid hsl(var(--border))',
                       borderRadius: '8px',
                       fontSize: '12px',
+                      color: 'hsl(var(--foreground))'
                     }}
+                    itemStyle={{ color: 'hsl(var(--foreground))' }}
                   />
                 </RechartsPie>
               </ResponsiveContainer>
             </div>
-            <div className="space-y-2 mt-2">
+            <div className="space-y-2 mt-4">
               {spendingData.map((item) => (
                 <div key={item.name} className="flex items-center justify-between text-xs">
                   <div className="flex items-center gap-2">
                     <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
                     <span className="text-muted-foreground">{item.name}</span>
                   </div>
-                  <span className="font-medium">{item.value}%</span>
+                  <span className="font-medium text-foreground">{item.value}%</span>
                 </div>
               ))}
             </div>
@@ -306,17 +310,17 @@ export default function DashboardPage() {
       {/* Activity + Accounts Row */}
       <motion.div variants={fadeUp} className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Recent Activity */}
-        <Card className="glass-card">
+        <Card className="bg-card border border-border/50 rounded-2xl">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-base md:text-lg">Recent Activity</CardTitle>
-              <Link href="/dashboard/transactions" className="text-xs text-primary hover:underline">
+              <CardTitle className="text-base md:text-lg text-foreground">Recent Activity</CardTitle>
+              <Link href="/dashboard/transactions" className="text-xs text-indigo-500 hover:text-indigo-600 font-medium">
                 View all
               </Link>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-1">
+            <div className="space-y-2">
               {demoTransactions.map((txn, i) => {
                 const isIncome = ['DEPOSIT', 'TRANSFER_IN', 'REFUND'].includes(txn.type);
                 return (
@@ -325,9 +329,9 @@ export default function DashboardPage() {
                     initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.05, duration: 0.3 }}
-                    className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-muted/50 transition-colors group cursor-pointer"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/50 transition-colors group cursor-pointer"
                   >
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
                       isIncome ? 'bg-emerald-500/10' : 'bg-red-500/10'
                     }`}>
                       {isIncome ? (
@@ -337,10 +341,10 @@ export default function DashboardPage() {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{txn.description}</p>
-                      <p className="text-xs text-muted-foreground">{formatRelativeTime(txn.createdAt)}</p>
+                      <p className="text-sm font-medium truncate text-foreground">{txn.description}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{formatRelativeTime(txn.createdAt)}</p>
                     </div>
-                    <span className={`text-sm font-semibold tabular-nums ${isIncome ? 'text-emerald-500' : 'text-red-500'}`}>
+                    <span className={`text-sm font-semibold tabular-nums ${isIncome ? 'text-emerald-500' : 'text-foreground'}`}>
                       {isIncome ? '+' : '-'}{formatCurrency(txn.amount)}
                     </span>
                   </motion.div>
@@ -351,11 +355,11 @@ export default function DashboardPage() {
         </Card>
 
         {/* Accounts Overview */}
-        <Card className="glass-card">
+        <Card className="bg-card border border-border/50 rounded-2xl">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-base md:text-lg">Your Accounts</CardTitle>
-              <Link href="/dashboard/accounts" className="text-xs text-primary hover:underline">
+              <CardTitle className="text-base md:text-lg text-foreground">Your Accounts</CardTitle>
+              <Link href="/dashboard/accounts" className="text-xs text-indigo-500 hover:text-indigo-600 font-medium">
                 Manage
               </Link>
             </div>
@@ -369,18 +373,18 @@ export default function DashboardPage() {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05 }}
-                    className="flex items-center gap-3 p-3 rounded-xl bg-muted/30 hover:bg-muted/60 transition-colors cursor-pointer"
+                    className="flex items-center gap-3 p-3 rounded-xl border border-border/40 hover:bg-muted/50 transition-colors cursor-pointer"
                   >
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 flex items-center justify-center">
                       <Wallet className="w-4 h-4 text-indigo-500" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{acc.name}</p>
-                      <p className="text-xs text-muted-foreground">{acc.type} · {acc.currency}</p>
+                      <p className="text-sm font-medium truncate text-foreground">{acc.name}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{acc.type} · {acc.currency}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-semibold tabular-nums">{formatCurrency(Number(acc.balance), acc.currency)}</p>
-                      <Badge variant={acc.status === 'ACTIVE' ? 'success' : 'warning'} className="text-[10px] mt-0.5">
+                      <p className="text-sm font-semibold tabular-nums text-foreground">{formatCurrency(Number(acc.balance), acc.currency)}</p>
+                      <Badge variant={acc.status === 'ACTIVE' ? 'success' : 'warning'} className="text-[10px] mt-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20">
                         {acc.status}
                       </Badge>
                     </div>
@@ -388,11 +392,11 @@ export default function DashboardPage() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8">
-                <Wallet className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+              <div className="text-center py-10 bg-muted/20 rounded-xl border border-dashed border-border/60">
+                <Wallet className="w-10 h-10 text-muted-foreground/50 mx-auto mb-3" />
                 <p className="text-sm text-muted-foreground">No accounts yet</p>
                 <Link href="/dashboard/accounts">
-                  <Button size="sm" variant="outline" className="mt-3">Create Account</Button>
+                  <Button size="sm" variant="outline" className="mt-4 rounded-lg">Create Account</Button>
                 </Link>
               </div>
             )}
@@ -402,17 +406,17 @@ export default function DashboardPage() {
 
       {/* Financial Insights */}
       <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-        <Card className="glass-card border-emerald-500/30 bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors">
+        <Card className="border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors rounded-2xl">
           <CardContent className="p-5 flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
-              <Target className="w-5 h-5 text-emerald-500" />
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center flex-shrink-0 shadow-inner">
+              <Target className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
-              <p className="text-sm font-semibold">Savings Goal</p>
+              <p className="text-sm font-semibold text-foreground">Savings Goal</p>
               <p className="text-xs text-muted-foreground mt-0.5">You&apos;re 68% towards your vacation fund</p>
-              <div className="w-full bg-emerald-500/10 rounded-full h-1.5 mt-3">
+              <div className="w-full bg-emerald-500/10 rounded-full h-2 mt-3 overflow-hidden">
                 <motion.div
-                  className="bg-emerald-500 h-1.5 rounded-full"
+                  className="bg-emerald-500 h-2 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: '68%' }}
                   transition={{ duration: 1, delay: 0.5, ease: [0.4, 0, 0.2, 1] }}
@@ -422,26 +426,26 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="glass-card border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 transition-colors">
+        <Card className="border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 transition-colors rounded-2xl">
           <CardContent className="p-5 flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
-              <Zap className="w-5 h-5 text-amber-500" />
+            <div className="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center flex-shrink-0 shadow-inner">
+              <Zap className="w-5 h-5 text-amber-600 dark:text-amber-400" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-amber-500">AI Financial Insight</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{insightsData.summary}</p>
+              <p className="text-sm font-semibold text-amber-600 dark:text-amber-500">AI Financial Insight</p>
+              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{insightsData.summary}</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="glass-card border-indigo-500/30 bg-indigo-500/5 hover:bg-indigo-500/10 transition-colors">
+        <Card className="border-indigo-500/20 bg-indigo-500/5 hover:bg-indigo-500/10 transition-colors rounded-2xl">
           <CardContent className="p-5 flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center flex-shrink-0">
-              <Bell className="w-5 h-5 text-indigo-500" />
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center flex-shrink-0 shadow-inner">
+              <Bell className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
             </div>
             <div>
-              <p className="text-sm font-semibold">3 Notifications</p>
-              <p className="text-xs text-muted-foreground mt-0.5">Transfer received, card created, and more</p>
+              <p className="text-sm font-semibold text-foreground">3 Notifications</p>
+              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">Transfer received, card created, and more</p>
             </div>
           </CardContent>
         </Card>

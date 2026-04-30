@@ -7,9 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { Landmark, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { authApi } from '@/lib/api';
 import { useAuthStore } from '@/store/auth-store';
 
@@ -53,130 +51,188 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-slate-950">
-      {/* Left - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden gradient-mesh">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 via-transparent to-purple-600/20" />
-        <div className="relative z-10 flex flex-col justify-center px-16">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center shadow-lg shadow-indigo-500/30">
-              <Landmark className="w-7 h-7 text-white" />
-            </div>
-            <span className="text-2xl font-bold text-white">FinanceHub</span>
-          </div>
-          <h1 className="text-5xl font-bold text-white leading-tight mb-6">
-            Your finances,<br />
-            <span className="text-gradient bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-              reimagined.
+    <div className="min-h-screen flex bg-white dark:bg-[#0A0A0A] text-black dark:text-[#E5E4DF] selection:bg-black selection:text-white dark:selection:bg-[#DFFF00] dark:selection:text-[#0A0A0A] transition-colors duration-300">
+      {/* ── Left - Brutalist Branding ── */}
+      <div className="hidden lg:flex lg:w-1/2 relative border-r border-black/[0.06] dark:border-[#E5E4DF]/[0.06] overflow-hidden">
+        {/* Architectural grid background */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-100" style={{
+          backgroundImage: `
+            linear-gradient(90deg, rgba(0,0,0,0.5) 1px, transparent 1px),
+            linear-gradient(0deg, rgba(0,0,0,0.5) 1px, transparent 1px)
+          `,
+          backgroundSize: '80px 80px',
+        }} />
+        
+        <div className="relative z-10 flex flex-col justify-center px-16 lg:px-24 w-full">
+          {/* Eyebrow */}
+          <div className="flex items-center gap-4 mb-12">
+            <div className="w-16 h-px bg-black dark:bg-[#DFFF00]" />
+            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-gray-500 dark:text-[#5A5A5A]">
+              Authentication
             </span>
+          </div>
+
+          <h1 className="text-[clamp(3rem,6vw,6rem)] font-extrabold text-black dark:text-[#E5E4DF] leading-[0.9] tracking-[-0.04em] mb-8">
+            ENTER<br />
+            <span className="text-gray-300 dark:text-[#3A3A3A]">THE<br />TERMINAL.</span>
           </h1>
-          <p className="text-lg text-slate-400 max-w-md">
-            Experience next-generation digital banking with real-time insights, smart analytics, and seamless transfers.
+          
+          <p className="text-[15px] leading-[1.8] text-gray-600 dark:text-[#7A7A7A] max-w-[400px]">
+            Enterprise-grade digital banking. Connect to your dashboard to manage virtual cards, execute transfers, and view real-time analytics.
           </p>
 
-          {/* Feature Cards */}
-          <div className="mt-12 grid grid-cols-2 gap-4 max-w-md">
-            {[
-              { label: 'Instant Transfers', value: '<1s' },
-              { label: 'Currencies', value: '8+' },
-              { label: 'Virtual Cards', value: 'Unlimited' },
-              { label: 'Uptime', value: '99.9%' },
-            ].map((stat) => (
-              <div key={stat.label} className="p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                <p className="text-2xl font-bold text-white">{stat.value}</p>
-                <p className="text-sm text-slate-400">{stat.label}</p>
-              </div>
-            ))}
+          {/* Protocol Details */}
+          <div className="mt-16 border-t border-black/[0.06] dark:border-[#E5E4DF]/[0.06] pt-8">
+            <div className="grid grid-cols-2 gap-8">
+              {[
+                { label: 'Latency', value: '<12ms' },
+                { label: 'Encryption', value: 'AES-256' },
+                { label: 'Protocol', value: 'SOC2 Type II' },
+                { label: 'Uptime', value: '99.99%' },
+              ].map((stat, i) => (
+                <div key={stat.label}>
+                  <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-gray-500 dark:text-[#5A5A5A] mb-2">
+                    {String(i + 1).padStart(2, '0')} // {stat.label}
+                  </div>
+                  <div className="font-mono text-[16px] text-black dark:text-[#E5E4DF]">
+                    {stat.value}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Right - Login Form */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12">
-        <div className="w-full max-w-md">
-          {/* Mobile Logo */}
-          <div className="lg:hidden flex items-center gap-3 mb-10">
-            <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
-              <Landmark className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold text-white">FinanceHub</span>
-          </div>
+      {/* ── Right - Login Form ── */}
+      <div className="flex-1 flex flex-col px-6 py-12 lg:px-24 justify-center relative">
+        {/* Top Navbar items */}
+        <div className="absolute top-0 left-0 right-0 h-14 flex items-center justify-between px-6 lg:px-24 border-b border-black/[0.06] dark:border-[#E5E4DF]/[0.06]">
+          <Link href="/" className="flex items-center gap-0">
+            <span className="text-[12px] font-bold tracking-[0.2em] uppercase text-black dark:text-[#E5E4DF]">
+              Finance
+            </span>
+            <span className="text-[12px] font-bold tracking-[0.2em] uppercase text-gray-500 dark:text-[#DFFF00]">
+              Hub
+            </span>
+            <span className="text-black dark:text-[#DFFF00] text-lg leading-none ml-0.5">.</span>
+          </Link>
+          <Link
+            href="/signup"
+            className="font-mono text-[10px] tracking-[0.2em] uppercase text-gray-500 dark:text-[#7A7A7A] hover:text-black dark:hover:text-[#E5E4DF] transition-colors"
+          >
+            Create Account ↗
+          </Link>
+        </div>
 
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-white mb-2">Welcome back</h2>
-            <p className="text-slate-400">
-              Sign in to your account to continue
+        <div className="w-full max-w-md mx-auto mt-14">
+          <div className="mb-10">
+            <h2 className="text-[32px] font-bold tracking-[-0.03em] text-black dark:text-[#E5E4DF] mb-2">
+              System Login
+            </h2>
+            <p className="text-[14px] text-gray-600 dark:text-[#7A7A7A]">
+              Provide your credentials to establish a secure session.
             </p>
           </div>
 
           {/* Demo Credentials Notice */}
-          <div className="mb-6 p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
-            <p className="text-xs text-indigo-400 font-medium mb-1">🔑 Demo Credentials</p>
-            <p className="text-xs text-slate-400">
-              <span className="text-slate-300">john@example.com</span> / <span className="text-slate-300">Password@123</span>
+          <div className="mb-8 p-4 bg-gray-50 dark:bg-[#E5E4DF]/[0.02] border border-black/[0.06] dark:border-[#E5E4DF]/[0.06]">
+            <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-black dark:text-[#DFFF00] mb-3">
+              Demo Access
             </p>
-            <p className="text-xs text-slate-400 mt-1">
-              Admin: <span className="text-slate-300">admin@financehub.dev</span> / <span className="text-slate-300">Password@123</span>
-            </p>
+            <div className="font-mono text-[11px] text-gray-600 dark:text-[#7A7A7A] space-y-2">
+              <div className="flex justify-between">
+                <span>User:</span>
+                <span className="text-black dark:text-[#E5E4DF]">john@example.com / Password@123</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Admin:</span>
+                <span className="text-black dark:text-[#E5E4DF]">admin@financehub.dev / Password@123</span>
+              </div>
+            </div>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
-              <Input
-                {...register('email')}
-                type="email"
-                placeholder="Enter your email"
-                icon={<Mail className="w-4 h-4" />}
-                error={errors.email?.message}
-                className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
-              />
+              <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-gray-500 dark:text-[#5A5A5A] mb-2">
+                Email Address
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-4 w-4 text-gray-400 dark:text-[#5A5A5A]" />
+                </div>
+                <input
+                  {...register('email')}
+                  type="email"
+                  placeholder="john@example.com"
+                  className="w-full bg-transparent border border-black/10 dark:border-[#E5E4DF]/20 text-black dark:text-[#E5E4DF] text-[14px] px-10 py-3.5 focus:outline-none focus:border-black dark:focus:border-[#DFFF00] transition-colors placeholder:text-gray-400 dark:placeholder:text-[#3A3A3A] rounded-none"
+                />
+              </div>
+              {errors.email && (
+                <p className="mt-2 text-red-500 dark:text-red-400 text-xs">{errors.email.message}</p>
+              )}
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-slate-300">Password</label>
-                <Link href="/forgot-password" className="text-xs text-indigo-400 hover:text-indigo-300">
-                  Forgot password?
+                <label className="block font-mono text-[10px] tracking-[0.2em] uppercase text-gray-500 dark:text-[#5A5A5A]">
+                  Authentication Key
+                </label>
+                <Link href="/forgot-password" className="font-mono text-[10px] tracking-[0.1em] text-gray-500 dark:text-[#7A7A7A] hover:text-black dark:hover:text-[#E5E4DF] transition-colors">
+                  Reset?
                 </Link>
               </div>
               <div className="relative">
-                <Input
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-4 w-4 text-gray-400 dark:text-[#5A5A5A]" />
+                </div>
+                <input
                   {...register('password')}
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
-                  icon={<Lock className="w-4 h-4" />}
-                  error={errors.password?.message}
-                  className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500 pr-10"
+                  className="w-full bg-transparent border border-black/10 dark:border-[#E5E4DF]/20 text-black dark:text-[#E5E4DF] text-[14px] px-10 py-3.5 focus:outline-none focus:border-black dark:focus:border-[#DFFF00] transition-colors placeholder:text-gray-400 dark:placeholder:text-[#3A3A3A] rounded-none"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 dark:text-[#5A5A5A] hover:text-black dark:hover:text-[#E5E4DF] transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
+              {errors.password && (
+                <p className="mt-2 text-red-500 dark:text-red-400 text-xs">{errors.password.message}</p>
+              )}
             </div>
 
-            <Button type="submit" className="w-full h-12" loading={loading}>
-              Sign In
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-black dark:bg-[#DFFF00] text-white dark:text-[#0A0A0A] font-bold text-[12px] tracking-[0.15em] uppercase py-4 hover:bg-black/90 dark:hover:bg-[#DFFF00]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="animate-spin h-4 w-4 border-2 border-white dark:border-[#0A0A0A] border-t-transparent rounded-full" />
+                  Authenticating...
+                </span>
+              ) : (
+                <>
+                  Initialize Session
+                  <span className="relative flex h-1.5 w-1.5 ml-1">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white dark:bg-[#0A0A0A] opacity-40" />
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white dark:bg-[#0A0A0A]" />
+                  </span>
+                </>
+              )}
+            </button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-slate-400">
-            Don't have an account?{' '}
-            <Link href="/signup" className="text-indigo-400 hover:text-indigo-300 font-medium">
-              Create account
-            </Link>
-          </p>
-
           {/* Simulator Notice */}
-          <p className="mt-6 text-center text-xs text-slate-600">
-            This is a fintech simulator for portfolio purposes only.
-            <br />No real financial transactions are processed.
-          </p>
+          <div className="mt-12 pt-6 border-t border-black/[0.06] dark:border-[#E5E4DF]/[0.06]">
+            <p className="text-center font-mono text-[9px] tracking-[0.1em] uppercase text-gray-400 dark:text-[#3A3A3A]">
+              Simulator Environment v1.0.0
+            </p>
+          </div>
         </div>
       </div>
     </div>
