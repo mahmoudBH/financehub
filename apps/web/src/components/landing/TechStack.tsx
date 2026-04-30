@@ -122,7 +122,7 @@ export function TechStack() {
           >
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-px bg-[#DFFF00]" />
-              <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#4A4A4A]">
+              <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#5A5A5A]">
                 Technology
               </span>
             </div>
@@ -152,7 +152,7 @@ export function TechStack() {
         >
           <div className="flex items-center gap-4 mb-6">
             <div className="w-12 h-px bg-[#E5E4DF]/20" />
-            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#4A4A4A]">
+            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#5A5A5A]">
               Security Protocol
             </span>
           </div>
@@ -185,7 +185,7 @@ export function TechStack() {
                   <h3 className="text-[16px] font-semibold text-[#E5E4DF] tracking-tight mb-2 group-hover:text-[#DFFF00] transition-colors duration-300">
                     {protocol.title}
                   </h3>
-                  <p className="text-[13px] leading-[1.7] text-[#5A5A5A]">
+                  <p className="text-[13px] leading-[1.7] text-[#7A7A7A]">
                     {protocol.description}
                   </p>
                 </div>

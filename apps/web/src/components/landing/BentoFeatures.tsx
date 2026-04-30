@@ -148,7 +148,7 @@ function LedgerRow({
                   transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
                   className="overflow-hidden"
                 >
-                  <p className="text-[14px] leading-[1.8] text-[#5A5A5A] max-w-[600px] mt-4 pr-4">
+                  <p className="text-[14px] leading-[1.8] text-[#7A7A7A] max-w-[600px] mt-4 pr-4">
                     {feature.description}
                   </p>
 
@@ -214,7 +214,7 @@ export function LedgerFeatures() {
             className="hidden lg:flex items-center gap-4"
           >
             <div className="w-16 h-px bg-[#DFFF00]" />
-            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#4A4A4A]">
+            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#5A5A5A]">
               Feature Ledger
             </span>
           </motion.div>

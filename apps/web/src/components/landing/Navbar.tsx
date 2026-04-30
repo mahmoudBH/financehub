@@ -39,7 +39,7 @@ export function Navbar() {
       }`}
     >
       {/* Top architectural line */}
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-[#E5E4DF]/8 to-transparent" />
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-[#E5E4DF]/[0.08] to-transparent" />
 
       <nav className="max-w-[1600px] mx-auto px-6 md:px-16 h-14 flex items-center justify-between">
         {/* ── Mark ── */}
@@ -81,7 +81,7 @@ export function Navbar() {
           ))}
 
           {/* Vertical divider */}
-          <div className="w-px h-3 bg-[#E5E4DF]/8" />
+          <div className="w-px h-3 bg-[#E5E4DF]/[0.08]" />
 
           <Link
             href="/login"

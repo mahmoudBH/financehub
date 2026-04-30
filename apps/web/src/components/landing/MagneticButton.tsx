@@ -7,10 +7,14 @@
 // no CSS transitions. Accent variant uses the
 // Electric Chartreuse (#DFFF00) for critical
 // interactions only.
+//
+// FIX: Reduced capture radius + padding to
+// prevent excessive invisible hit areas that
+// break layout alignment.
 // ============================================
 
 import { useRef, useState, useCallback } from 'react';
-import { motion, useSpring, useMotionValue, useTransform } from 'framer-motion';
+import { motion, useSpring, useTransform } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 interface MagneticButtonProps {
@@ -31,8 +35,8 @@ export function MagneticButton({
   className,
   href,
   onClick,
-  captureRadius = 140,
-  strength = 0.3,
+  captureRadius = 100,
+  strength = 0.25,
   variant = 'accent',
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -48,8 +52,8 @@ export function MagneticButton({
   const innerY = useTransform(y, (v) => v * 0.4);
 
   // Subtle rotation based on cursor position
-  const rotateX = useTransform(y, [-30, 30], [3, -3]);
-  const rotateY = useTransform(x, [-30, 30], [-3, 3]);
+  const rotateX = useTransform(y, [-20, 20], [2, -2]);
+  const rotateY = useTransform(x, [-20, 20], [-2, 2]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
@@ -62,7 +66,7 @@ export function MagneticButton({
       const distance = Math.sqrt(distX * distX + distY * distY);
 
       if (distance < captureRadius) {
-        const pull = 1 - distance / captureRadius; // stronger when closer
+        const pull = 1 - distance / captureRadius;
         x.set(distX * strength * pull * 1.5);
         y.set(distY * strength * pull * 1.5);
         if (!isHovered) setIsHovered(true);
@@ -99,7 +103,8 @@ export function MagneticButton({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="relative inline-block"
-      style={{ padding: captureRadius / 2.5 }}
+      // Reduced padding: just enough for magnetic feel, without breaking layout
+      style={{ padding: '12px' }}
     >
       <motion.div
         style={{ x, y, rotateX, rotateY }}
@@ -109,7 +114,7 @@ export function MagneticButton({
           {...linkProps}
           onClick={onClick}
           className={cn(
-            'relative inline-flex items-center gap-3 px-10 py-4 text-[13px] font-semibold tracking-[0.15em] uppercase transition-all duration-300',
+            'relative inline-flex items-center gap-3 px-8 py-3.5 text-[12px] font-semibold tracking-[0.15em] uppercase transition-all duration-300',
             variantStyles[variant],
             className
           )}
@@ -124,9 +129,9 @@ export function MagneticButton({
 
           {/* Live pulse indicator — accent only */}
           {variant === 'accent' && (
-            <span className="relative flex h-2 w-2 ml-1">
+            <span className="relative flex h-1.5 w-1.5 ml-1">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0A0A0A] opacity-30" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#0A0A0A]" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#0A0A0A]" />
             </span>
           )}
         </Tag>

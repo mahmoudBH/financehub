@@ -40,7 +40,7 @@ export function GrandCTA() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-32 md:py-48 overflow-hidden"
+      className="relative py-32 md:py-40 overflow-hidden"
       id="cta"
     >
       {/* Architectural grid background */}
@@ -61,7 +61,7 @@ export function GrandCTA() {
           className="flex items-center gap-4 mb-12"
         >
           <div className="w-16 h-px bg-[#DFFF00]" />
-          <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#4A4A4A]">
+          <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#5A5A5A]">
             Begin
           </span>
         </motion.div>
@@ -101,7 +101,7 @@ export function GrandCTA() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 1.4, duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-          className="text-[15px] leading-[1.8] text-[#5A5A5A] max-w-[500px] mb-12"
+          className="text-[15px] leading-[1.8] text-[#7A7A7A] max-w-[500px] mb-12"
         >
           FinanceHub is open-source and ready for your portfolio.
           Fork it, customize it, make it yours.
@@ -112,7 +112,7 @@ export function GrandCTA() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 1.8, duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-          className="flex items-center gap-2 flex-wrap -ml-14"
+          className="flex items-center gap-4 flex-wrap"
         >
           <MagneticButton variant="accent" href="/signup">
             Create Account
@@ -150,7 +150,7 @@ export function Footer() {
           </div>
 
           {/* ── Links ── */}
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-6 md:gap-8 flex-wrap">
             {[
               { label: 'Features', href: '#features' },
               { label: 'Architecture', href: '#stack' },
@@ -160,7 +160,7 @@ export function Footer() {
               <a
                 key={link.label}
                 href={link.href}
-                className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#4A4A4A] hover:text-[#E5E4DF] transition-colors duration-300"
+                className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#5A5A5A] hover:text-[#E5E4DF] transition-colors duration-300"
               >
                 {link.label}
               </a>

@@ -117,16 +117,16 @@ function DataVisualization() {
       </svg>
 
       {/* Corner coordinates — terminal aesthetic */}
-      <div className="absolute top-0 left-0 font-mono text-[8px] text-[#3A3A3A] tracking-widest">
+      <div className="absolute top-1 left-1 font-mono text-[8px] text-[#3A3A3A] tracking-widest select-none">
         0,0
       </div>
-      <div className="absolute top-0 right-0 font-mono text-[8px] text-[#3A3A3A] tracking-widest">
+      <div className="absolute top-1 right-1 font-mono text-[8px] text-[#3A3A3A] tracking-widest select-none">
         1920,0
       </div>
-      <div className="absolute bottom-0 left-0 font-mono text-[8px] text-[#3A3A3A] tracking-widest">
+      <div className="absolute bottom-1 left-1 font-mono text-[8px] text-[#3A3A3A] tracking-widest select-none">
         0,1080
       </div>
-      <div className="absolute bottom-0 right-0 font-mono text-[8px] text-[#DFFF00]/40 tracking-widest">
+      <div className="absolute bottom-1 right-1 font-mono text-[8px] text-[#DFFF00]/40 tracking-widest select-none">
         LIVE
       </div>
     </div>
@@ -222,7 +222,7 @@ function TerminalStats({ inView }: { inView: boolean }) {
     <div className="flex items-center gap-8 md:gap-12 flex-wrap">
       {stats.map((stat) => (
         <div key={stat.label} className="group">
-          <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#4A4A4A] mb-1">
+          <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#5A5A5A] mb-1">
             {stat.label}
           </div>
           <div className="font-mono text-[22px] md:text-[28px] font-light text-[#E5E4DF] tracking-tight">
@@ -281,8 +281,8 @@ export function Hero() {
     <section
       ref={heroRef}
       id="hero"
-      className="relative min-h-screen flex flex-col justify-end overflow-hidden"
-      style={{ paddingTop: '15vh', paddingBottom: '8vh' }}
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden"
+      style={{ paddingTop: '12vh', paddingBottom: '6vh' }}
     >
       {/* ── Background: Architectural grid lines ── */}
       <div className="absolute inset-0 pointer-events-none">
@@ -308,7 +308,7 @@ export function Hero() {
         className="relative z-10 max-w-[1600px] mx-auto px-6 md:px-16 w-full"
       >
         {/* Asymmetric layout — break the grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.7fr] gap-8 lg:gap-4 items-end">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.7fr] gap-8 lg:gap-4 items-center">
           {/* ── Left: Typography block ── */}
           <motion.div style={{ y: headlineY, skewY }} className="relative">
             {/* Eyebrow */}
@@ -319,7 +319,7 @@ export function Hero() {
               className="flex items-center gap-3 mb-8"
             >
               <div className="w-12 h-px bg-[#DFFF00]" />
-              <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#4A4A4A]">
+              <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#5A5A5A]">
                 Digital Banking Protocol
               </span>
             </motion.div>
@@ -361,7 +361,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 1.4, duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-              className="text-[15px] md:text-[17px] leading-[1.7] text-[#6A6A6A] max-w-[480px] mb-10"
+              className="text-[15px] md:text-[17px] leading-[1.7] text-[#8A8A8A] max-w-[480px] mb-8"
             >
               Enterprise-grade banking infrastructure rendered in a stunning
               simulator. Real-time transfers, virtual cards, AI insights —
@@ -373,7 +373,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 1.8, duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-              className="flex items-center gap-2 flex-wrap -ml-14"
+              className="flex items-center gap-4 flex-wrap"
             >
               <MagneticButton variant="accent" href="/signup">
                 Launch App
@@ -401,7 +401,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 2.2, duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-          className="mt-16 pt-8 border-t border-[#E5E4DF]/[0.06]"
+          className="mt-10 pt-6 border-t border-[#E5E4DF]/[0.06]"
         >
           <TerminalStats inView={inView} />
         </motion.div>
