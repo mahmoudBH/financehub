@@ -122,7 +122,7 @@ graph TD
 <img width="1920" height="1003" alt="Cards Page" src="https://github.com/user-attachments/assets/a132e8ee-5c52-4375-a3e1-b057f5e47e1f" />
 
 ### 7. Transfers Page
-<img width="1920" height="1003" alt="Transfers Page" src="https://github.com/user-attachments/assets/7861560f-7801-4b9f-ad02-b30c6c3d602b" />
+<img width="1917" height="867" alt="Transfers" src="https://github.com/user-attachments/assets/7298c96c-8ae6-4d32-889f-931aecf36f86" />
 
 ### 8. Transactions Page
 <img width="1920" height="1238" alt="Transactions Page" src="https://github.com/user-attachments/assets/ad48e48b-b0f3-4749-8d3a-066e36f394d6" />
@@ -140,7 +140,7 @@ graph TD
 <img width="1920" height="1003" alt="Smart Savings Vaults Page" src="https://github.com/user-attachments/assets/e4865ec9-5c99-4dc9-8018-f60d9e1bf983" />
 
 ### 13. Notifications Page
-<img width="1920" height="1003" alt="Notifications Page" src="https://github.com/user-attachments/assets/724f0c0a-0b29-4b54-9476-e136b77b2214" />
+<img width="1920" height="1003" alt="Notifications" src="https://github.com/user-attachments/assets/c5381151-cd38-4ecc-9585-de8fec23a75f" />
 
 ### 14. Profile Page
 <img width="1920" height="2045" alt="Profile Page" src="https://github.com/user-attachments/assets/77ade3a7-b29e-4c06-a2b4-7f88b1f44cbd" />
