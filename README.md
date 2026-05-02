@@ -316,8 +316,9 @@ The Prisma schema includes 15 models with proper relations, indexes, and constra
 
 ## 🌍 Live Demo
 
-Frontend: [https://financehub-demo.vercel.app  ](https://financehub-web-one.vercel.app/)
-API: [https://financehub-api.onrender.com](https://financehub-sz1i.onrender.com)
+- Frontend: [https://financehub-demo.vercel.app  ](https://financehub-web-one.vercel.app/)
+
+- API: [https://financehub-api.onrender.com](https://financehub-sz1i.onrender.com)
 ---
 
 ## 🚀 Quick Start
