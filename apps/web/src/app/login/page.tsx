@@ -92,7 +92,7 @@ export default function LoginPage() {
               ].map((stat, i) => (
                 <div key={stat.label}>
                   <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-gray-500 dark:text-[#5A5A5A] mb-2">
-                    {String(i + 1).padStart(2, '0')} // {stat.label}
+                    {String(i + 1).padStart(2, '0')} {'//'} {stat.label}
                   </div>
                   <div className="font-mono text-[16px] text-black dark:text-[#E5E4DF]">
                     {stat.value}
