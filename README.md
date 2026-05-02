@@ -99,11 +99,54 @@ graph TD
 ```
 
 ## 📸 Screenshots
-Mode Light
-<img width="1920" height="1877" alt="screencapture-localhost-3000-dashboard-2026-04-29-15_52_44" src="https://github.com/user-attachments/assets/d996c181-f7ae-4e20-a3f7-cbb01017cb89" />
 
-Mode dark
-<img width="1920" height="1877" alt="screencapture-localhost-3000-dashboard-2026-04-29-15_53_18" src="https://github.com/user-attachments/assets/933510da-ba54-4236-b993-f3b7c827a865" />
+> Below are previews of the main FinanceHub pages.  
+> Each screenshot highlights a key part of the fintech experience.
+
+### 1. Landing Page
+<img width="1918" height="860" alt="Landing Page" src="https://github.com/user-attachments/assets/d53d832b-1e25-49a4-a501-a13757620f71" />
+
+### 2. Login Page
+<img width="1920" height="917" alt="Login Page" src="https://github.com/user-attachments/assets/02467e5c-16cd-4ba2-8aca-deac6eee9e71" />
+
+### 3. Full Dashboard — Dark Mode
+<img width="1920" height="2033" alt="Dark Mode Dashboard" src="https://github.com/user-attachments/assets/c262ed14-6a90-4f80-bfbb-9ed55470166d" />
+
+### 4. Dashboard Overview
+<img width="1918" height="863" alt="Dashboard Overview" src="https://github.com/user-attachments/assets/903bb850-0198-4ed6-8411-8aa0edc65857" />
+
+### 5. Accounts Page
+<img width="1920" height="1003" alt="Accounts Page" src="https://github.com/user-attachments/assets/d1b980f5-1e16-4446-b98e-b946c1782e7e" />
+
+### 6. Cards Page
+<img width="1920" height="1003" alt="Cards Page" src="https://github.com/user-attachments/assets/a132e8ee-5c52-4375-a3e1-b057f5e47e1f" />
+
+### 7. Transfers Page
+<img width="1917" height="867" alt="Transfers" src="https://github.com/user-attachments/assets/7298c96c-8ae6-4d32-889f-931aecf36f86" />
+
+### 8. Transactions Page
+<img width="1920" height="1238" alt="Transactions Page" src="https://github.com/user-attachments/assets/ad48e48b-b0f3-4749-8d3a-066e36f394d6" />
+
+### 9. Deposits & Withdrawals
+<img width="1920" height="987" alt="Deposits and Withdrawals Page" src="https://github.com/user-attachments/assets/affb1135-69c2-4798-8c1e-8a70c94a8db3" />
+
+### 10. Currency Exchange
+<img width="1920" height="1185" alt="Currency Exchange Page" src="https://github.com/user-attachments/assets/bb5e6dd6-32e7-4708-9e55-a900c1bb782a" />
+
+### 11. Investments & Crypto
+<img width="1920" height="1003" alt="Investments and Crypto Page" src="https://github.com/user-attachments/assets/5f3c8378-2349-4b3f-849f-ad3c08a960f3" />
+
+### 12. Smart Savings Vaults
+<img width="1920" height="1003" alt="Smart Savings Vaults Page" src="https://github.com/user-attachments/assets/e4865ec9-5c99-4dc9-8018-f60d9e1bf983" />
+
+### 13. Notifications Page
+<img width="1920" height="1003" alt="Notifications" src="https://github.com/user-attachments/assets/c5381151-cd38-4ecc-9585-de8fec23a75f" />
+
+### 14. Profile Page
+<img width="1920" height="2045" alt="Profile Page" src="https://github.com/user-attachments/assets/77ade3a7-b29e-4c06-a2b4-7f88b1f44cbd" />
+
+### 15. Settings & Security
+<img width="1920" height="2639" alt="Settings and Security Page" src="https://github.com/user-attachments/assets/2b5a49cf-59c1-4942-9a55-f83f21000694" />
 
 
 
