@@ -105,6 +105,7 @@ graph TD
         NestJS -->|ioredis| Redis[(Redis Cache / PubSub)]
         NestJS -.-> JWT[Auth & JWT Guards]
     end
+```
 ---
 
 ## 🧠 Architecture Decisions
