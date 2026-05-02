@@ -7,7 +7,7 @@
 ![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.4-blue.svg)
 
-**A modern, enterprise-grade fintech dashboard simulator built for portfolio demonstration.**
+**A modern fintech dashboard simulator designed for portfolio demonstration and product design showcase.**
 
 **Author:** Mahmoud Bousbih
 
@@ -17,51 +17,59 @@
 
 ## 🎯 Overview
 
-FinanceHub is a full-stack digital banking simulator that showcases modern fintech application development. It features a complete authentication system, multi-account management, interactive 3D virtual cards, real-time transfers, currency exchange, AI-driven insights, Smart Savings Vaults, and an admin supervision panel. It incorporates an ultra-premium "Glassmorphism" UI/UX to match high-end banking apps.
+FinanceHub is a full-stack digital banking simulator built to showcase modern fintech application design and engineering practices. It includes secure authentication, multi-account management, virtual cards, transfers, deposits, withdrawals, currency exchange, notifications, analytics, Smart Savings Vaults, and an admin supervision panel.
+
+The project focuses on a polished UI/UX, modular architecture, secure workflows, and a realistic banking-style experience.
 
 > ⚠️ **This is a simulator.** No real financial transactions are processed.
+
+---
 
 ## ✨ Features
 
 | Feature | Description |
 |---------|-------------|
-| 🔐 **Authentication & Security** | JWT, 2FA/OTP simulation, Active Sessions management, full Security Audit Logs |
-| 💰 **Accounts & Vaults** | Multiple virtual accounts + Smart Savings Vaults with "Round-up" spare change |
-| 💳 **3D Virtual Cards** | Interactive physics-based 3D cards, create, block, activate (Visa/Mastercard/Amex) |
-| 💸 **Transfers & Split Bill** | Internal transfers with fee calculation and "Split the Bill" request tracking |
-| 📊 **Dashboard & AI Insights** | Real-time financial overview with AI-generated Smart Tips and spending analytics |
-| 📈 **Investments Portfolio** | Track simulated Crypto and Stocks (Mock API) with interactive charts |
-| 💱 **Exchange** | Live currency conversion with 8 supported currencies |
-| 🎁 **Rewards System** | Loyalty Tiers (Standard, Premium, Metal) and Cashback points tracking |
-| 🔔 **Notifications** | In-app notifications with unread indicators and mock system events |
+| 🔐 **Authentication & Security** | JWT-based auth, refresh token rotation, 2FA/OTP simulation, active sessions, audit logs |
+| 💰 **Accounts & Vaults** | Multiple virtual accounts and Smart Savings Vaults with round-up spare change simulation |
+| 💳 **Virtual Cards** | Interactive virtual cards with create, block, activate, and limit management flows |
+| 💸 **Transfers & Split Bill** | Internal transfers with fee calculation and split-bill request tracking |
+| 📊 **Dashboard & Insights** | Financial overview with analytics, summaries, and rule-based insight simulation |
+| 📈 **Investments Portfolio** | Simulated crypto and stocks portfolio using mock market data |
+| 💱 **Exchange** | Currency conversion with multiple supported currencies |
+| 🎁 **Rewards System** | Loyalty tiers and cashback points tracking |
+| 🔔 **Notifications** | In-app notifications with unread states and system events |
 | 🛡️ **Admin Panel** | User management, audit logs, transaction supervision |
-| 📱 **Responsive UI/UX** | Glassmorphism, Framer Motion animations, mobile/tablet/desktop support |
+| 📱 **Responsive UI/UX** | Premium fintech-inspired design with smooth responsive behavior |
+
+---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
 - **Next.js 14** (App Router) + **TypeScript**
-- **TailwindCSS** + **shadcn/ui** components
-- **Framer Motion** for 3D physics and smooth UI interactions
+- **TailwindCSS** + **shadcn/ui**
+- **Framer Motion** for smooth motion and transitions
 - **TanStack Query** for server state
 - **Zustand** for client state
 - **Recharts** for data visualization
 - **Zod** + **React Hook Form** for validation
-- **Socket.io** client for real-time
+- **Socket.io** client for real-time updates
 
 ### Backend
 - **NestJS** + **TypeScript**
 - **Prisma ORM** + **MySQL**
-- **Redis** for caching
+- **Redis** for caching and performance optimization
 - **JWT** authentication with refresh token rotation
 - **Swagger/OpenAPI** documentation
-- **Socket.io** for WebSocket
+- **Socket.io** for WebSocket communication
 - **bcryptjs** for password hashing
 
 ### DevOps
 - **Docker** + **Docker Compose**
 - **GitHub Actions** CI/CD
 - **Turborepo** monorepo management
+
+---
 
 ## 📁 Project Structure
 
@@ -83,20 +91,32 @@ finance-dashboard/
 ├── .github/workflows/    # CI/CD
 └── docs/                 # Documentation
 ```
+---
 
 ## 🏗️ Architecture Diagram
 
 ```mermaid
 graph TD
     Client[Web Browser / Client] -->|HTTP / WebSocket| NextJS[Next.js Frontend]
-    NextJS -->|REST API / Socket.io| NestJS[NestJS API Gateway & Backend]
-    
+    NextJS -->|REST API / Socket.io| NestJS[NestJS API & Backend]
+
     subgraph Backend Architecture
         NestJS -->|Prisma ORM| MySQL[(MySQL Database)]
         NestJS -->|ioredis| Redis[(Redis Cache / PubSub)]
-        NestJS -.-> JWT[Auth & JWT Guard]
+        NestJS -.-> JWT[Auth & JWT Guards]
     end
-```
+---
+
+## 🧠 Architecture Decisions
+
+- **Next.js** was chosen for the frontend because it provides a modern React framework with strong routing, server rendering, and excellent developer experience.
+- **NestJS** was chosen for the backend because it supports modular architecture, dependency injection, and enterprise-style code organization.
+- **Prisma** was chosen for type-safe database access and clean relational modeling.
+- **MySQL** was chosen for structured financial data, consistency, and relational integrity.
+- **Redis** was chosen for caching, temporary session-like data, and performance optimization.
+- **Turborepo** was chosen to manage the monorepo and share code efficiently between frontend and backend.
+- **JWT with refresh token rotation** was chosen to provide a secure authentication strategy.
+---
 
 ## 📸 Screenshots
 
@@ -222,6 +242,76 @@ graph TD
     </td>
   </tr>
 </table>
+---
+
+## 🔄 Core Business Flows
+
+### Transfer Flow
+1. Validate user input with frontend and backend validation.
+2. Check sender account balance.
+3. Calculate fees and verify limits.
+4. Create a pending transfer record.
+5. Execute the balance update atomically.
+6. Create the transaction entry.
+7. Send a realtime notification.
+8. Write an audit log entry.
+
+### Exchange Flow
+1. Select source and target currencies.
+2. Load the current exchange rate.
+3. Preview the converted amount.
+4. Verify account balance.
+5. Execute the conversion.
+6. Record the transaction and exchange history.
+7. Notify the user and log the action.
+
+### Card Management Flow
+1. Create a virtual card linked to an account.
+2. Mask sensitive card information.
+3. Allow activate, block, and freeze actions.
+4. Track card status changes in audit logs.
+---
+
+## 🗄️ Database Schema
+
+The Prisma schema includes 15 models with proper relations, indexes, and constraints:
+- User, RefreshToken, PasswordResetToken, EmailVerificationToken
+- Account, Card, Beneficiary, Vault, SplitRequest
+- Transfer, Transaction, Deposit, Withdrawal
+- ExchangeRate, ExchangeHistory
+- Notification, AuditLog
+---
+
+## 🔒 Security
+
+- JWT access tokens (15min expiry)
+- Refresh token rotation with hashed storage
+- bcrypt password hashing (12 rounds)
+- Rate limiting (100 req/60s)
+- RBAC authorization guards
+- Input validation with class-validator
+- Helmet security headers
+- CORS strict configuration
+- Audit trail for sensitive actions
+- No storage of CVV, raw PAN, or plain passwords
+---
+
+## ⚠️ Limitations
+
+- This project is a simulator and does not process real banking transactions.
+- No real payment gateway is integrated.
+- Currency exchange rates may be mocked or cached for demonstration purposes.
+- AI-related insights are rule-based simulations unless connected to a real AI service.
+- 3D card visuals are part of the UI experience and not connected to a physical payment system.
+---
+
+## 🧪 Testing
+
+- Unit tests with Jest
+- API integration tests with Supertest
+- Frontend component tests where applicable
+- Validation and business logic testing for authentication, transfers, and account updates
+---
 
 ## 🚀 Quick Start
 
@@ -320,27 +410,7 @@ Full documentation available at **/api/docs** (Swagger UI)
 
 </details>
 
-## 🗄️ Database Schema
 
-The Prisma schema includes 15 models with proper relations, indexes, and constraints:
-- User, RefreshToken, PasswordResetToken, EmailVerificationToken
-- Account, Card, Beneficiary, Vault, SplitRequest
-- Transfer, Transaction, Deposit, Withdrawal
-- ExchangeRate, ExchangeHistory
-- Notification, AuditLog
-
-## 🔒 Security
-
-- JWT access tokens (15min expiry)
-- Refresh token rotation with hashed storage
-- bcrypt password hashing (12 rounds)
-- Rate limiting (100 req/60s)
-- RBAC authorization guards
-- Input validation with class-validator
-- Helmet security headers
-- CORS strict configuration
-- Audit trail for sensitive actions
-- No storage of CVV, raw PAN, or plain passwords
 
 ## 📝 License
 
