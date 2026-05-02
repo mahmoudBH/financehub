@@ -100,55 +100,128 @@ graph TD
 
 ## 📸 Screenshots
 
-> Below are previews of the main FinanceHub pages.  
-> Each screenshot highlights a key part of the fintech experience.
+> ✨ A visual walkthrough of FinanceHub — from onboarding to advanced financial operations.  
+> Built with a premium fintech aesthetic, smooth interactions, and a refined user experience.
 
-### 1. Landing Page
-<img width="1918" height="860" alt="Landing Page" src="https://github.com/user-attachments/assets/d53d832b-1e25-49a4-a501-a13757620f71" />
+### 🌐 Public Experience
 
-### 2. Login Page
-<img width="1920" height="917" alt="Login Page" src="https://github.com/user-attachments/assets/02467e5c-16cd-4ba2-8aca-deac6eee9e71" />
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <strong>Landing Page</strong><br/>
+      <img src="https://github.com/user-attachments/assets/d53d832b-1e25-49a4-a501-a13757620f71" alt="Landing Page" width="100%" />
+      <p><em>Elegant marketing page with premium branding and onboarding flow.</em></p>
+    </td>
+    <td align="center" width="50%">
+      <strong>Login Page</strong><br/>
+      <img src="https://github.com/user-attachments/assets/02467e5c-16cd-4ba2-8aca-deac6eee9e71" alt="Login Page" width="100%" />
+      <p><em>Secure and smooth login experience with modern UI patterns.</em></p>
+    </td>
+  </tr>
+</table>
 
-### 3. Full Dashboard — Dark Mode
-<img width="1920" height="2033" alt="Dark Mode Dashboard" src="https://github.com/user-attachments/assets/c262ed14-6a90-4f80-bfbb-9ed55470166d" />
+### 📊 Dashboard Experience
 
-### 4. Dashboard Overview
-<img width="1918" height="863" alt="Dashboard Overview" src="https://github.com/user-attachments/assets/903bb850-0198-4ed6-8411-8aa0edc65857" />
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <strong>Full Dashboard — Dark Mode</strong><br/>
+      <img src="https://github.com/user-attachments/assets/c262ed14-6a90-4f80-bfbb-9ed55470166d" alt="Dark Mode Dashboard" width="100%" />
+      <p><em>Immersive dark mode with financial insights and analytics.</em></p>
+    </td>
+    <td align="center" width="50%">
+      <strong>Dashboard Overview</strong><br/>
+      <img src="https://github.com/user-attachments/assets/903bb850-0198-4ed6-8411-8aa0edc65857" alt="Dashboard Overview" width="100%" />
+      <p><em>Real-time financial summary, charts, and quick actions.</em></p>
+    </td>
+  </tr>
+</table>
 
-### 5. Accounts Page
-<img width="1920" height="1003" alt="Accounts Page" src="https://github.com/user-attachments/assets/d1b980f5-1e16-4446-b98e-b946c1782e7e" />
+### 💳 Banking Features
 
-### 6. Cards Page
-<img width="1920" height="1003" alt="Cards Page" src="https://github.com/user-attachments/assets/a132e8ee-5c52-4375-a3e1-b057f5e47e1f" />
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <strong>Accounts Management</strong><br/>
+      <img src="https://github.com/user-attachments/assets/d1b980f5-1e16-4446-b98e-b946c1782e7e" alt="Accounts Page" width="100%" />
+      <p><em>Multi-account overview with balances and analytics.</em></p>
+    </td>
+    <td align="center" width="50%">
+      <strong>Virtual Cards</strong><br/>
+      <img src="https://github.com/user-attachments/assets/a132e8ee-5c52-4375-a3e1-b057f5e47e1f" alt="Cards Page" width="100%" />
+      <p><em>Interactive 3D cards with realistic fintech UI.</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <strong>Transfers</strong><br/>
+      <img src="https://github.com/user-attachments/assets/7861560f-7801-4b9f-ad02-b30c6c3d602b" alt="Transfers Page" width="100%" />
+      <p><em>Seamless money transfer flow with validation and UX clarity.</em></p>
+    </td>
+    <td align="center" width="50%">
+      <strong>Transactions History</strong><br/>
+      <img src="https://github.com/user-attachments/assets/ad48e48b-b0f3-4749-8d3a-066e36f394d6" alt="Transactions Page" width="100%" />
+      <p><em>Detailed transaction tracking with filters and insights.</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <strong>Deposit & Withdrawal</strong><br/>
+      <img src="https://github.com/user-attachments/assets/affb1135-69c2-4798-8c1e-8a70c94a8db3" alt="Deposit Withdraw Page" width="100%" />
+      <p><em>Core banking operations with intuitive user flows.</em></p>
+    </td>
+    <td align="center" width="50%">
+      <strong>Currency Exchange</strong><br/>
+      <img src="https://github.com/user-attachments/assets/bb5e6dd6-32e7-4708-9e55-a900c1bb782a" alt="Currency Exchange Page" width="100%" />
+      <p><em>Real-time currency conversion with visual feedback.</em></p>
+    </td>
+  </tr>
+</table>
 
-### 7. Transfers Page
-<img width="1917" height="867" alt="Transfers" src="https://github.com/user-attachments/assets/7298c96c-8ae6-4d32-889f-931aecf36f86" />
+### 📈 Advanced Features
 
-### 8. Transactions Page
-<img width="1920" height="1238" alt="Transactions Page" src="https://github.com/user-attachments/assets/ad48e48b-b0f3-4749-8d3a-066e36f394d6" />
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <strong>Investments & Crypto</strong><br/>
+      <img src="https://github.com/user-attachments/assets/5f3c8378-2349-4b3f-849f-ad3c08a960f3" alt="Investments Crypto Page" width="100%" />
+      <p><em>Simulated investment portfolio with interactive charts.</em></p>
+    </td>
+    <td align="center" width="50%">
+      <strong>Smart Savings Vaults</strong><br/>
+      <img src="https://github.com/user-attachments/assets/e4865ec9-5c99-4dc9-8018-f60d9e1bf983" alt="Vaults Page" width="100%" />
+      <p><em>Goal-based savings with progress tracking and automation.</em></p>
+    </td>
+  </tr>
+</table>
 
-### 9. Deposits & Withdrawals
-<img width="1920" height="987" alt="Deposits and Withdrawals Page" src="https://github.com/user-attachments/assets/affb1135-69c2-4798-8c1e-8a70c94a8db3" />
+### 🔔 User Experience
 
-### 10. Currency Exchange
-<img width="1920" height="1185" alt="Currency Exchange Page" src="https://github.com/user-attachments/assets/bb5e6dd6-32e7-4708-9e55-a900c1bb782a" />
-
-### 11. Investments & Crypto
-<img width="1920" height="1003" alt="Investments and Crypto Page" src="https://github.com/user-attachments/assets/5f3c8378-2349-4b3f-849f-ad3c08a960f3" />
-
-### 12. Smart Savings Vaults
-<img width="1920" height="1003" alt="Smart Savings Vaults Page" src="https://github.com/user-attachments/assets/e4865ec9-5c99-4dc9-8018-f60d9e1bf983" />
-
-### 13. Notifications Page
-<img width="1920" height="1003" alt="Notifications" src="https://github.com/user-attachments/assets/c5381151-cd38-4ecc-9585-de8fec23a75f" />
-
-### 14. Profile Page
-<img width="1920" height="2045" alt="Profile Page" src="https://github.com/user-attachments/assets/77ade3a7-b29e-4c06-a2b4-7f88b1f44cbd" />
-
-### 15. Settings & Security
-<img width="1920" height="2639" alt="Settings and Security Page" src="https://github.com/user-attachments/assets/2b5a49cf-59c1-4942-9a55-f83f21000694" />
-
-
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <strong>Notifications</strong><br/>
+      <img src="https://github.com/user-attachments/assets/724f0c0a-0b29-4b54-9476-e136b77b2214" alt="Notifications Page" width="100%" />
+      <p><em>Real-time alerts and system notifications.</em></p>
+    </td>
+    <td align="center" width="50%">
+      <strong>Profile & Security</strong><br/>
+      <img src="https://github.com/user-attachments/assets/77ade3a7-b29e-4c06-a2b4-7f88b1f44cbd" alt="Profile Page" width="100%" />
+      <p><em>User profile management with advanced security settings.</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <strong>Settings & Security Center</strong><br/>
+      <img src="https://github.com/user-attachments/assets/2b5a49cf-59c1-4942-9a55-f83f21000694" alt="Settings Security Page" width="100%" />
+      <p><em>Full control over preferences, sessions, and security.</em></p>
+    </td>
+    <td align="center" width="50%">
+      <strong>—</strong><br/>
+      <p><em></em></p>
+    </td>
+  </tr>
+</table>
 
 ## 🚀 Quick Start
 
